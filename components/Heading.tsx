@@ -1,19 +1,19 @@
 import React, { FC } from 'react';
 import { StyleSheet, Text } from 'react-native';
-import { useFonts } from 'expo-font';
 
 interface IParagraphProps {
   children: React.ReactNode;
 }
 
-const Paragraph: FC<IParagraphProps> = ({ children }) => {
+const Heading: FC<IParagraphProps> = ({ children }) => {
   return <Text style={styles.paragraph}>{children}</Text>;
 };
 
 const styles = StyleSheet.create({
   paragraph: {
-    fontSize: 14,
+    fontSize: 20,
+    fontWeight: '600',
   },
 });
 
-export default Paragraph;
+export default Heading;
