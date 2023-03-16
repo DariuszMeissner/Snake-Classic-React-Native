@@ -1,4 +1,4 @@
-import Paragraph from './Paragraph';
-import Heading from './Heading';
+import TextCustom from './TextCustom';
+import Layout from './Layout';
 
-export { Paragraph, Heading };
+export { TextCustom, Layout };
