@@ -1,4 +1,5 @@
-import Game from './Game';
-import Menu from './Menu';
+import Root from './Root';
+import Game from './game/Game';
+import Menu from './menu/Menu';
 
-export { Game, Menu };
+export { Root, Game, Menu };
