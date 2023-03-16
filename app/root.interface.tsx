@@ -11,7 +11,7 @@ export namespace root {
   }
 
   export interface IApp {
-    highestScore: number;
+    heighestScore: number;
     speed: number;
     currentLevel: {
       name: TLevels;
@@ -25,7 +25,7 @@ export namespace root {
       menu: boolean;
       newGame: boolean;
       level: boolean;
-      highestScore: boolean;
+      heighestScore: boolean;
       gameOver: boolean;
     };
   }

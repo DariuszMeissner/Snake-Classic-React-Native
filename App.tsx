@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { View, StyleSheet, Text } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 import * as Font from 'expo-font';
+import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 import Root from './app/Root';
-import { View, StyleSheet, Text } from 'react-native';
 import { CUSTOM_FONTS, SETTINGS_DEFAULT } from './constant/settingsDefault';
 
 // Keep the splash screen visible while we fetch resources
@@ -10,12 +11,28 @@ SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
+  const [storageScore, setStorageScore] = useState<string>('');
+  const { getItem } = useAsyncStorage('@storage_key');
+
+  const loadFont = async () => {
+    await Font.loadAsync(CUSTOM_FONTS);
+  };
+
+  const readItemFromStorage = async () => {
+    const item = await getItem();
+
+    if (item) {
+      setStorageScore(item);
+    }
+  };
 
   useEffect(() => {
     async function prepare() {
       try {
         // Pre-load fonts, make any API calls you need to do here
-        await Font.loadAsync(CUSTOM_FONTS);
+        loadFont();
+
+        readItemFromStorage();
       } catch (e) {
         console.warn(e);
       } finally {
@@ -49,7 +66,7 @@ export default function App() {
   return (
     <React.StrictMode>
       <View style={styles.root} onLayout={onLayoutRootView}>
-        <Root />
+        <Root storageBestScore={storageScore} />
       </View>
     </React.StrictMode>
   );

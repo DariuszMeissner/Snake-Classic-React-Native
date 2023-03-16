@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Game from './game/Game';
@@ -7,9 +7,23 @@ import { root } from './root.interface';
 import { MenuBestScore, MenuLevels } from './menu';
 import { APP_INIT } from './root.data';
 import { GameOver } from './game';
+import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 
-const Root = () => {
+interface IRootProps {
+  storageBestScore: string;
+}
+
+const Root: FC<IRootProps> = ({ storageBestScore }) => {
+  const { setItem } = useAsyncStorage('@storage_key');
   const [appState, setAppState] = useState<root.IApp>(APP_INIT);
+
+  useEffect(() => {
+    setAppState((prev) => ({ ...prev, heighestScore: Number(storageBestScore) }));
+  }, []);
+
+  const writeItemToStorage = async (score: string) => {
+    await setItem(score);
+  };
 
   function goToStep(activeStep: root.TSteps): void {
     setAppState((prev) => ({
@@ -19,7 +33,7 @@ const Root = () => {
         menu: activeStep === 'menu',
         newGame: activeStep === 'new game',
         level: activeStep === 'levels',
-        highestScore: activeStep === 'highest score',
+        heighestScore: activeStep === 'highest score',
         gameOver: activeStep === 'gameOver',
       },
     }));
@@ -42,16 +56,18 @@ const Root = () => {
   }
 
   function checkHeighestScore(score: number): number {
-    return score > appState.highestScore ? score : appState.highestScore;
+    return score > appState.heighestScore ? score : appState.heighestScore;
   }
 
-  function setHighestScore(score: number): void {
+  function setHeighestScore(score: number): void {
     const newScore = checkHeighestScore(score);
 
     setAppState((prev) => ({
       ...prev,
-      hightScore: newScore,
+      heighestScore: newScore,
     }));
+
+    writeItemToStorage(newScore.toString());
   }
 
   function goToMenuAndSetLevel(currentLevel: root.TLevels): void {
@@ -66,7 +82,7 @@ const Root = () => {
       {appState.step.newGame && (
         <Game
           speedOfGame={appState.speed}
-          setHeighestScore={setHighestScore}
+          setHeighestScore={setHeighestScore}
           showGameOverScreen={goToStep}
         />
       )}
@@ -75,8 +91,8 @@ const Root = () => {
         <MenuLevels onPress={goToMenuAndSetLevel} currentLevel={appState.currentLevel.name} />
       )}
 
-      {appState.step.highestScore && (
-        <MenuBestScore onPress={goToStep} bestResult={appState.highestScore} />
+      {appState.step.heighestScore && (
+        <MenuBestScore onPress={goToStep} bestResult={appState.heighestScore} />
       )}
 
       {appState.step.gameOver && <GameOver goToMenu={goToStep} />}

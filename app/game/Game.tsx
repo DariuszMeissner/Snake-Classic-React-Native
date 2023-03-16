@@ -5,6 +5,7 @@ import { SETTINGS_DEFAULT } from '../../constant/settingsDefault';
 import { root } from '../root.interface';
 import { GameSettings } from './game.interface';
 import { BLOCK_SIZE, INIT_SETTINGS } from './game.data';
+import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 
 interface IGame {
   speedOfGame: number;
@@ -153,10 +154,6 @@ const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen }) 
     }
   }
 
-  function resumeGame(): void {
-    setBoard((prev) => ({ ...prev, gameIsStopped: false }));
-  }
-
   function updateScores(): void {
     setBoard((prev) => ({ ...prev, points: prev.points + 1 }));
   }
@@ -171,6 +168,10 @@ const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen }) 
         setBoard((prev) => ({ ...prev, gameOver: true }));
       }
     }
+  }
+
+  function resumeGame(): void {
+    setBoard((prev) => ({ ...prev, gameIsStopped: false }));
   }
 
   function stopGame() {
