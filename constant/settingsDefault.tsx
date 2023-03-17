@@ -5,6 +5,7 @@ export const SETTINGS_DEFAULT = {
     main: '#384331',
     second: '#8fa37e',
   },
+  fontName: 'PressStart2P-Regular',
   layout: {
     heightSection: {
       scores: responsiveHeight(5),
@@ -23,5 +24,4 @@ export const SETTINGS_DEFAULT = {
 
 export const CUSTOM_FONTS = {
   'PressStart2P-Regular': require('../assets/fonts/PressStart2P-Regular.ttf'),
-  name: 'PressStart2P-Regular',
 };
