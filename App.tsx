@@ -1,21 +1,41 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import * as SplashScreen from 'expo-splash-screen';
-import * as Font from 'expo-font';
-import Root from './app/Root';
 import { View, StyleSheet, Text } from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { useAsyncStorage } from '@react-native-async-storage/async-storage';
+import * as Font from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
+import Root from './app/Root';
 import { CUSTOM_FONTS, SETTINGS_DEFAULT } from './constant/settingsDefault';
+import { StatusBar } from 'expo-status-bar';
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
+  const [storageScore, setStorageScore] = useState<string>('');
+  const { getItem } = useAsyncStorage('@storage_key');
+
+  const loadFont = async () => {
+    await Font.loadAsync(CUSTOM_FONTS);
+  };
+
+  const readItemFromStorage = async () => {
+    const item = await getItem();
+
+    if (item) {
+      setStorageScore(item);
+    }
+  };
 
   useEffect(() => {
     async function prepare() {
       try {
         // Pre-load fonts, make any API calls you need to do here
-        await Font.loadAsync(CUSTOM_FONTS);
+        loadFont();
+        readItemFromStorage();
+
+        await new Promise((resolve) => setTimeout(resolve, 2000));
       } catch (e) {
         console.warn(e);
       } finally {
@@ -48,9 +68,14 @@ export default function App() {
 
   return (
     <React.StrictMode>
-      <View style={styles.root} onLayout={onLayoutRootView}>
-        <Root />
-      </View>
+      <SafeAreaProvider>
+        <SafeAreaView>
+          <View style={styles.root} onLayout={onLayoutRootView}>
+            <Root storageBestScore={storageScore} />
+            <StatusBar style={'dark'} />
+          </View>
+        </SafeAreaView>
+      </SafeAreaProvider>
     </React.StrictMode>
   );
 }

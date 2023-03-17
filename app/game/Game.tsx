@@ -5,6 +5,8 @@ import { SETTINGS_DEFAULT } from '../../constant/settingsDefault';
 import { root } from '../root.interface';
 import { GameSettings } from './game.interface';
 import { BLOCK_SIZE, INIT_SETTINGS } from './game.data';
+import { useAsyncStorage } from '@react-native-async-storage/async-storage';
+import { TextCustom } from '../../components';
 
 interface IGame {
   speedOfGame: number;
@@ -40,15 +42,8 @@ const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen }) 
   function drawBoard(): JSX.Element[][] {
     return board.rows.map((row, i) =>
       row.map((value, j) =>
-        j === INIT_SETTINGS.board.width - 1 ? (
-          <>
-            <View
-              key={`${i}-${j}`}
-              nativeID={`${i}-${j}`}
-              style={{ ...styles.gridItem, backgroundColor: setColorOfBoardElements(value) }}
-            />
-            <View key={`${i * j * j}`} style={styles.gridBreak} />
-          </>
+        j === INIT_SETTINGS.board.width ? (
+          <View key={`${i * j * j}`} style={styles.gridBreak} />
         ) : (
           <View
             key={`${i}-${j}`}
@@ -73,20 +68,22 @@ const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen }) 
   }
 
   function changeDirection(key: GameSettings.TDirection): void {
-    let newDirection: GameSettings.TDirection = board.direction;
+    let currentDirection: GameSettings.TDirection = board.direction;
 
-    if (key === 'left') newDirection = board.direction === 'right' ? 'right' : 'left';
-    if (key === 'right') newDirection = board.direction === 'left' ? 'left' : 'right';
-    if (key === 'up') newDirection = board.direction === 'down' ? 'down' : 'up';
-    if (key === 'down') newDirection = board.direction === 'up' ? 'up' : 'down';
-    if (key === 'stop') newDirection = 'stop';
+    if (board.direction != 'stop') {
+      if (key === 'left') currentDirection = board.direction === 'right' ? 'right' : 'left';
+      if (key === 'right') currentDirection = board.direction === 'left' ? 'left' : 'right';
+      if (key === 'up') currentDirection = board.direction === 'down' ? 'down' : 'up';
+      if (key === 'down') currentDirection = board.direction === 'up' ? 'up' : 'down';
+      if (key === 'stop') currentDirection = 'stop';
+    }
     if (key === 'start') {
-      newDirection = board.lastDirection;
+      currentDirection = board.lastDirection;
       resumeGame();
     }
-    setBoard((prev) => ({ ...prev, direction: newDirection }));
+    setBoard((prev) => ({ ...prev, direction: currentDirection }));
 
-    saveLastDirection(newDirection);
+    saveLastDirection(currentDirection);
   }
 
   function updateFrame(): void {
@@ -153,10 +150,6 @@ const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen }) 
     }
   }
 
-  function resumeGame(): void {
-    setBoard((prev) => ({ ...prev, gameIsStopped: false }));
-  }
-
   function updateScores(): void {
     setBoard((prev) => ({ ...prev, points: prev.points + 1 }));
   }
@@ -171,6 +164,10 @@ const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen }) 
         setBoard((prev) => ({ ...prev, gameOver: true }));
       }
     }
+  }
+
+  function resumeGame(): void {
+    setBoard((prev) => ({ ...prev, gameIsStopped: false }));
   }
 
   function stopGame() {

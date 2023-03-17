@@ -24,7 +24,7 @@ const TextCustom: FC<ITextCustom> = ({ children, style, size }) => {
 
 const styles = StyleSheet.create({
   default: {
-    fontFamily: CUSTOM_FONTS.name,
+    fontFamily: SETTINGS_DEFAULT.fontName,
     color: SETTINGS_DEFAULT.colors.main,
     textTransform: 'uppercase',
     lineHeight: 20,

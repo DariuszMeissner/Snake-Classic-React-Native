@@ -6,10 +6,10 @@ export const APP_INIT: root.IApp = {
     menu: true,
     newGame: false,
     level: false,
-    highestScore: false,
+    heighestScore: false,
     gameOver: false,
   },
-  highestScore: 0,
+  heighestScore: 0,
   speed: root.SpeedLevel.medium,
   currentLevel: {
     name: 'medium',
