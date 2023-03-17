@@ -1,10 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
-import * as SplashScreen from 'expo-splash-screen';
-import * as Font from 'expo-font';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useAsyncStorage } from '@react-native-async-storage/async-storage';
+import * as Font from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
 import Root from './app/Root';
 import { CUSTOM_FONTS, SETTINGS_DEFAULT } from './constant/settingsDefault';
+import { StatusBar } from 'expo-status-bar';
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
@@ -31,8 +33,9 @@ export default function App() {
       try {
         // Pre-load fonts, make any API calls you need to do here
         loadFont();
-
         readItemFromStorage();
+
+        await new Promise((resolve) => setTimeout(resolve, 2000));
       } catch (e) {
         console.warn(e);
       } finally {
@@ -65,9 +68,14 @@ export default function App() {
 
   return (
     <React.StrictMode>
-      <View style={styles.root} onLayout={onLayoutRootView}>
-        <Root storageBestScore={storageScore} />
-      </View>
+      <SafeAreaProvider>
+        <SafeAreaView>
+          <View style={styles.root} onLayout={onLayoutRootView}>
+            <Root storageBestScore={storageScore} />
+            <StatusBar style={'dark'} />
+          </View>
+        </SafeAreaView>
+      </SafeAreaProvider>
     </React.StrictMode>
   );
 }

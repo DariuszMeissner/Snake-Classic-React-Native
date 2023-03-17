@@ -1,6 +1,4 @@
 import React, { FC, useEffect, useState } from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Game from './game/Game';
 import Menu from './menu/Menu';
 import { root } from './root.interface';
@@ -8,6 +6,7 @@ import { MenuBestScore, MenuLevels } from './menu';
 import { APP_INIT } from './root.data';
 import { GameOver } from './game';
 import { useAsyncStorage } from '@react-native-async-storage/async-storage';
+import { View } from 'react-native';
 
 interface IRootProps {
   storageBestScore: string;
@@ -76,7 +75,7 @@ const Root: FC<IRootProps> = ({ storageBestScore }) => {
   }
 
   return (
-    <SafeAreaProvider style={{ margin: 'auto' }}>
+    <View style={{ margin: 'auto' }}>
       {appState.step.menu && <Menu onPress={goToStep} />}
 
       {appState.step.newGame && (
@@ -96,9 +95,7 @@ const Root: FC<IRootProps> = ({ storageBestScore }) => {
       )}
 
       {appState.step.gameOver && <GameOver goToMenu={goToStep} />}
-
-      <StatusBar style="auto" />
-    </SafeAreaProvider>
+    </View>
   );
 };
 
