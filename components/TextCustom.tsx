@@ -14,7 +14,7 @@ const TextCustom: FC<ITextCustom> = ({ children, style, size }) => {
       style={{
         ...styles.default,
         ...style,
-        fontSize: size || 14,
+        fontSize: size || 18,
       }}
     >
       {children}

@@ -5,7 +5,7 @@ import { SETTINGS_DEFAULT } from '../../constant/settingsDefault';
 import { root } from '../root.interface';
 
 interface IMenuButtonProps {
-  title: root.TSteps | root.TLevels;
+  title: root.TSteps | root.TLevels | string;
   currentLevel?: root.TLevels;
   onPress: () => void;
 }
@@ -22,7 +22,7 @@ const MenuButton: FC<IMenuButtonProps> = ({ title, onPress, currentLevel }) => {
           backgroundColor: isActive ? colors.main : colors.second,
         }}
       >
-        <TextCustom size={18} style={{ color: isActive ? colors.second : colors.main }}>
+        <TextCustom style={{ color: isActive ? colors.second : colors.main }}>
           {title === 'veryHeight' ? 'very height' : title}
         </TextCustom>
       </View>
