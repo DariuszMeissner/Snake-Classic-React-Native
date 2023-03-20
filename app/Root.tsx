@@ -87,7 +87,11 @@ const Root: FC<IRootProps> = ({ storageBestScore }) => {
       )}
 
       {appState.step.level && (
-        <MenuLevels onPress={goToMenuAndSetLevel} currentLevel={appState.currentLevel.name} />
+        <MenuLevels
+          onPressSetLevel={goToMenuAndSetLevel}
+          onPressGoToStep={goToStep}
+          currentLevel={appState.currentLevel.name}
+        />
       )}
 
       {appState.step.heighestScore && (
