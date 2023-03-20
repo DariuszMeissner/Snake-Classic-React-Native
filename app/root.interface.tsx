@@ -1,13 +1,13 @@
 export namespace root {
   export type TLevels = 'veryHeight' | 'height' | 'medium' | 'easy';
   export type TSteps = 'menu' | 'new game' | 'levels' | 'highest score' | 'gameOver';
-  export type TSpeed = 50 | 100 | 200 | 300;
+  export type TSpeed = 30 | 60 | 120 | 240;
 
   export enum SpeedLevel {
-    veryHeight = 50,
-    height = 100,
-    medium = 200,
-    easy = 300,
+    veryHeight = 30,
+    height = veryHeight * 2,
+    medium = height * 2,
+    easy = medium * 2,
   }
 
   export interface IApp {
