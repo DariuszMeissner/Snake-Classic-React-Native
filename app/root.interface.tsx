@@ -12,6 +12,7 @@ export namespace root {
 
   export interface IApp {
     heighestScore: number;
+    currentScore: number;
     speed: number;
     currentLevel: {
       name: TLevels;

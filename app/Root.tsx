@@ -58,12 +58,18 @@ const Root: FC<IRootProps> = ({ storageBestScore }) => {
     return score > appState.heighestScore ? score : appState.heighestScore;
   }
 
+  function setCurrentScore(score: number): number {
+    return score;
+  }
+
   function setHeighestScore(score: number): void {
     const newScore = checkHeighestScore(score);
+    const currentScore = setCurrentScore(score);
 
     setAppState((prev) => ({
       ...prev,
       heighestScore: newScore,
+      currentScore,
     }));
 
     writeItemToStorage(newScore.toString());
@@ -98,7 +104,9 @@ const Root: FC<IRootProps> = ({ storageBestScore }) => {
         <MenuBestScore onPress={goToStep} bestResult={appState.heighestScore} />
       )}
 
-      {appState.step.gameOver && <GameOver goToMenu={goToStep} />}
+      {appState.step.gameOver && (
+        <GameOver goToMenu={goToStep} currentResult={appState.currentScore} />
+      )}
     </View>
   );
 };

@@ -4,9 +4,10 @@ import { root } from '../root.interface';
 
 interface IGameOverProps {
   goToMenu: (activeStep: root.TSteps) => void;
+  currentResult: number;
 }
 
-const GameOver: FC<IGameOverProps> = ({ goToMenu }) => {
+const GameOver: FC<IGameOverProps> = ({ goToMenu, currentResult }) => {
   useEffect(() => {
     const intervalId = setTimeout(() => goToMenu('menu'), 2000);
 
@@ -16,6 +17,7 @@ const GameOver: FC<IGameOverProps> = ({ goToMenu }) => {
   return (
     <Layout>
       <TextCustom>Game Over</TextCustom>
+      <TextCustom>Your result:&nbsp;{currentResult}</TextCustom>
     </Layout>
   );
 };
