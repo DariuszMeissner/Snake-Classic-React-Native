@@ -110,9 +110,10 @@ const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen }) 
 
     if (snakeHead.x < 0) snakeHead.x = numberOfRows - 1;
     if (snakeHead.x >= numberOfRows) snakeHead.x = 0;
-    if (snakeHead.y < 0) snakeHead.y = numberOfColumn - 1;
-    if (snakeHead.y >= numberOfColumn) snakeHead.y = 0;
+    if (snakeHead.y < 0) snakeHead.y = numberOfColumn - 2;
+    if (snakeHead.y >= numberOfColumn - 1) snakeHead.y = 0;
 
+    console.log(numberOfColumn, snakeHead.y);
     newSnakeBody.push(snakeHead);
     newSnakeBody.shift();
 

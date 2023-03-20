@@ -1,5 +1,5 @@
 import React, { FC, useEffect } from 'react';
-import { Layout, TextCustom } from '../../components';
+import { Layout, Space, TextCustom } from '../../components';
 import { root } from '../root.interface';
 
 interface IGameOverProps {
@@ -17,7 +17,8 @@ const GameOver: FC<IGameOverProps> = ({ goToMenu, currentResult }) => {
   return (
     <Layout>
       <TextCustom>Game Over</TextCustom>
-      <TextCustom>Your result:&nbsp;{currentResult}</TextCustom>
+      <Space value={20} />
+      <TextCustom size={14}>Your result:&nbsp;{currentResult}</TextCustom>
     </Layout>
   );
 };
