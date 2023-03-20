@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { StyleSheet } from 'react-native';
-import { Layout, TextCustom } from '../../components';
+import { Layout, Space, TextCustom } from '../../components';
 import { root } from '../root.interface';
 import MenuButton from './MenuButton';
 
@@ -14,8 +14,9 @@ const MenuBestScore: FC<IMenuBestScore> = ({ onPress, bestResult }) => {
     <Layout>
       <TextCustom style={styles.header}>Best result</TextCustom>
 
-      <TextCustom style={styles.score}>{bestResult}</TextCustom>
+      <TextCustom>{bestResult}</TextCustom>
 
+      <Space />
       <MenuButton title={'<- go to menu'} onPress={() => onPress('menu')} />
     </Layout>
   );
@@ -24,9 +25,6 @@ const MenuBestScore: FC<IMenuBestScore> = ({ onPress, bestResult }) => {
 const styles = StyleSheet.create({
   header: {
     paddingBottom: 20,
-  },
-  score: {
-    paddingBottom: 50,
   },
 });
 
