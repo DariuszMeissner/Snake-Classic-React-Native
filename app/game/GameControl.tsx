@@ -35,6 +35,7 @@ const GameControl: FC<IGameControlProps> = ({ changeDirection, currentDirection 
 
 const styles = StyleSheet.create({
   gameControl: {
+    width: SETTINGS_DEFAULT.app.content.width,
     height: SETTINGS_DEFAULT.layout.heightSection.control,
     flexDirection: 'column',
     justifyContent: 'center',

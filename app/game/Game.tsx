@@ -4,9 +4,6 @@ import { GameBoard, GameControl, GameScores, GameWarning } from '.';
 import { SETTINGS_DEFAULT } from '../../constant/settingsDefault';
 import { root } from '../root.interface';
 import { GameSettings } from './game.interface';
-import { BLOCK_SIZE, INIT_SETTINGS } from './game.data';
-import { useAsyncStorage } from '@react-native-async-storage/async-storage';
-import { TextCustom } from '../../components';
 
 interface IGame {
   speedOfGame: number;
@@ -18,7 +15,7 @@ const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen }) 
   const intervalRef = useRef<any>(null);
   const [board, setBoard] = useState<GameSettings.IBoard>({
     rows: generateRows(),
-    snakeBody: [INIT_SETTINGS.board.snakeStartPosition],
+    snakeBody: [SETTINGS_DEFAULT.snakeStartPosition],
     food: generatePosition(),
     direction: 'right',
     lastDirection: 'right',
@@ -28,8 +25,8 @@ const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen }) 
   });
 
   function generateRows(): string[][] {
-    return [...Array(INIT_SETTINGS.board.height)].map((_) =>
-      [...Array(INIT_SETTINGS.board.width)].map((_) => 'gridItem')
+    return [...Array(SETTINGS_DEFAULT.layout.board.numberOfRows)].map((_) =>
+      [...Array(SETTINGS_DEFAULT.layout.board.numberOfColumn)].map((_) => 'gridItem')
     );
   }
 
@@ -42,11 +39,12 @@ const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen }) 
   function drawBoard(): JSX.Element[][] {
     return board.rows.map((row, i) =>
       row.map((value, j) =>
-        j === INIT_SETTINGS.board.width ? (
+        j === SETTINGS_DEFAULT.layout.board.numberOfColumn - 1 ? (
           <View key={`${i * j * j}`} style={styles.gridBreak} />
         ) : (
           <View
             key={`${i}-${j}`}
+            nativeID={`${i}-${j}`}
             style={{ ...styles.gridItem, backgroundColor: setColorOfBoardElements(value) }}
           />
         )
@@ -56,8 +54,8 @@ const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen }) 
 
   function generatePosition(): GameSettings.ICordinates {
     return {
-      x: Math.floor(Math.random() * INIT_SETTINGS.board.height),
-      y: Math.floor(Math.random() * INIT_SETTINGS.board.width),
+      x: Math.floor(Math.random() * SETTINGS_DEFAULT.layout.board.numberOfRows),
+      y: Math.floor(Math.random() * SETTINGS_DEFAULT.layout.board.numberOfColumn),
     };
   }
 
@@ -101,7 +99,7 @@ const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen }) 
       return;
     }
 
-    const { width, height } = INIT_SETTINGS.board;
+    const { numberOfColumn, numberOfRows } = SETTINGS_DEFAULT.layout.board;
     let newSnakeBody = board.snakeBody;
     let snakeHead = { ...newSnakeBody[newSnakeBody.length - 1] };
 
@@ -110,10 +108,10 @@ const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen }) 
     if (board.direction === 'up') snakeHead.x += -1;
     if (board.direction === 'down') snakeHead.x += 1;
 
-    if (snakeHead.x < 0) snakeHead.x = height - 1;
-    if (snakeHead.x >= height) snakeHead.x = 0;
-    if (snakeHead.y < 0) snakeHead.y = width - 1;
-    if (snakeHead.y >= width) snakeHead.y = 0;
+    if (snakeHead.x < 0) snakeHead.x = numberOfRows - 1;
+    if (snakeHead.x >= numberOfRows) snakeHead.x = 0;
+    if (snakeHead.y < 0) snakeHead.y = numberOfColumn - 1;
+    if (snakeHead.y >= numberOfColumn) snakeHead.y = 0;
 
     newSnakeBody.push(snakeHead);
     newSnakeBody.shift();
@@ -124,8 +122,9 @@ const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen }) 
   }
 
   function onEatingFood(): void {
-    let newSnakeBody = board.snakeBody;
+    const { numberOfColumn, numberOfRows } = SETTINGS_DEFAULT.layout.board;
     let newPositionFood = generatePosition();
+    let newSnakeBody = board.snakeBody;
     let snakeHead = { ...newSnakeBody[newSnakeBody.length - 1] };
     const { food } = board;
 
@@ -138,11 +137,11 @@ const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen }) 
       // and generate new one
       for (let i = 0; i < newSnakeBody.length; i++) {
         if (newSnakeBody[i].x === newPositionFood.x) {
-          newPositionFood.x = Math.floor(Math.random() * INIT_SETTINGS.board.height);
+          newPositionFood.x = Math.floor(Math.random() * numberOfRows);
         }
 
         if (newSnakeBody[i].y === newPositionFood.y) {
-          newPositionFood.y = Math.floor(Math.random() * INIT_SETTINGS.board.width);
+          newPositionFood.y = Math.floor(Math.random() * numberOfColumn);
         }
       }
 
@@ -226,16 +225,16 @@ const styles = StyleSheet.create({
     height: 0,
   },
   gridItem: {
-    width: BLOCK_SIZE,
-    height: BLOCK_SIZE,
+    width: SETTINGS_DEFAULT.layout.board.blockSize,
+    height: SETTINGS_DEFAULT.layout.board.blockSize,
   },
   snakeBody: {
-    width: BLOCK_SIZE,
-    height: BLOCK_SIZE,
+    width: SETTINGS_DEFAULT.layout.board.blockSize,
+    height: SETTINGS_DEFAULT.layout.board.blockSize,
   },
   food: {
-    width: BLOCK_SIZE,
-    height: BLOCK_SIZE,
+    width: SETTINGS_DEFAULT.layout.board.blockSize,
+    height: SETTINGS_DEFAULT.layout.board.blockSize,
   },
 });
 

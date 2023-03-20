@@ -12,7 +12,9 @@ const GameButton: FC<IButtonNavProps> = ({ title, handleMove }) => {
   return (
     <TouchableHighlight onPress={handleMove}>
       <View style={styles.button}>
-        <TextCustom style={{ ...styles.buttonText }}>{title}</TextCustom>
+        <TextCustom size={14} style={{ ...styles.buttonText }}>
+          {title}
+        </TextCustom>
       </View>
     </TouchableHighlight>
   );
@@ -21,7 +23,7 @@ const GameButton: FC<IButtonNavProps> = ({ title, handleMove }) => {
 const styles = StyleSheet.create({
   button: {
     height: SETTINGS_DEFAULT.layout.heightSection.control / 3,
-    width: SETTINGS_DEFAULT.layout.width / 3,
+    width: SETTINGS_DEFAULT.app.content.width / 3,
     backgroundColor: SETTINGS_DEFAULT.colors.main,
     justifyContent: 'center',
     alignItems: 'center',

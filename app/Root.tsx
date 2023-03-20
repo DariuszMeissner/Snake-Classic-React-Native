@@ -6,7 +6,7 @@ import { MenuBestScore, MenuLevels } from './menu';
 import { APP_INIT } from './root.data';
 import { GameOver } from './game';
 import { useAsyncStorage } from '@react-native-async-storage/async-storage';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 interface IRootProps {
   storageBestScore: string;
@@ -75,7 +75,7 @@ const Root: FC<IRootProps> = ({ storageBestScore }) => {
   }
 
   return (
-    <View style={{ margin: 'auto' }}>
+    <View style={styles.rootContainer}>
       {appState.step.menu && <Menu onPress={goToStep} />}
 
       {appState.step.newGame && (
@@ -98,5 +98,11 @@ const Root: FC<IRootProps> = ({ storageBestScore }) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  rootContainer: {
+    margin: 'auto',
+  },
+});
 
 export default Root;

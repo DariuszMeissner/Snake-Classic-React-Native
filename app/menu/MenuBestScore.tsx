@@ -12,15 +12,11 @@ interface IMenuBestScore {
 const MenuBestScore: FC<IMenuBestScore> = ({ onPress, bestResult }) => {
   return (
     <Layout>
-      <TextCustom size={18} style={styles.header}>
-        Best result
-      </TextCustom>
+      <TextCustom style={styles.header}>Best result</TextCustom>
 
-      <TextCustom size={18} style={styles.score}>
-        {bestResult}
-      </TextCustom>
+      <TextCustom style={styles.score}>{bestResult}</TextCustom>
 
-      <MenuButton title={'go to menu'} onPress={() => onPress('menu')} />
+      <MenuButton title={'<- go to menu'} onPress={() => onPress('menu')} />
     </Layout>
   );
 };

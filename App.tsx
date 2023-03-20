@@ -20,6 +20,10 @@ export default function App() {
     await Font.loadAsync(CUSTOM_FONTS);
   };
 
+  const extendShowingScreen = async () => {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+  };
+
   const readItemFromStorage = async () => {
     const item = await getItem();
 
@@ -34,8 +38,7 @@ export default function App() {
         // Pre-load fonts, make any API calls you need to do here
         loadFont();
         readItemFromStorage();
-
-        await new Promise((resolve) => setTimeout(resolve, 2000));
+        extendShowingScreen();
       } catch (e) {
         console.warn(e);
       } finally {
@@ -49,11 +52,6 @@ export default function App() {
 
   const onLayoutRootView = useCallback(async () => {
     if (appIsReady) {
-      // This tells the splash screen to hide immediately! If we call this after
-      // `setAppIsReady`, then we may see a blank screen while the app is
-      // loading its initial state and rendering its first pixels. So instead,
-      // we hide the splash screen once we know the root view has already
-      // performed layout.
       await SplashScreen.hideAsync();
     }
   }, [appIsReady]);
@@ -83,7 +81,7 @@ export default function App() {
 const styles = StyleSheet.create({
   root: {
     backgroundColor: SETTINGS_DEFAULT.colors.second,
-    height: SETTINGS_DEFAULT.layout.height,
-    width: SETTINGS_DEFAULT.layout.width,
+    height: SETTINGS_DEFAULT.app.height,
+    width: SETTINGS_DEFAULT.app.width,
   },
 });

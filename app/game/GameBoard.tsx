@@ -7,16 +7,13 @@ interface IGameBoardProps {
   children: React.ReactNode;
 }
 
-const BLOCK_SIZE = SETTINGS_DEFAULT.layout.board.blockSize;
-const BORDER_WIDTH = SETTINGS_DEFAULT.layout.board.borderWidth;
-
 const GameBoard: FC<IGameBoardProps> = ({ children }) => {
   return <View style={styles.gameBoard}>{children}</View>;
 };
 
 const styles = StyleSheet.create({
   gameBoard: {
-    width: Math.floor(SETTINGS_DEFAULT.layout.width / BLOCK_SIZE) * BLOCK_SIZE + 2 * BORDER_WIDTH,
+    width: SETTINGS_DEFAULT.app.content.width,
     borderStyle: 'solid',
     borderColor: SETTINGS_DEFAULT.colors.main,
     borderWidth: SETTINGS_DEFAULT.layout.board.borderWidth,

@@ -8,14 +8,9 @@ interface IGameScoresProps {
 }
 
 const GameScores: FC<IGameScoresProps> = ({ result }) => {
-  const widthWindow = SETTINGS_DEFAULT.layout.width;
-  const blockSize = SETTINGS_DEFAULT.layout.board.blockSize;
-
-  const paddingCompensation = (widthWindow - Math.floor(widthWindow / blockSize) * blockSize) / 2;
-
   return (
-    <View style={{ ...styles.gameScores, padding: paddingCompensation }}>
-      <TextCustom>{result || 0}</TextCustom>
+    <View style={styles.gameScores}>
+      <TextCustom size={14}>{result || 0}</TextCustom>
     </View>
   );
 };
@@ -23,7 +18,7 @@ const GameScores: FC<IGameScoresProps> = ({ result }) => {
 const styles = StyleSheet.create({
   gameScores: {
     height: SETTINGS_DEFAULT.layout.heightSection.scores,
-    width: Math.floor(SETTINGS_DEFAULT.layout.width),
+    width: SETTINGS_DEFAULT.app.content.width,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'flex-start',
