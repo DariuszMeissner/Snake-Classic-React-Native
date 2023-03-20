@@ -8,9 +8,10 @@ interface IMenuButtonProps {
   title: root.TSteps | root.TLevels | string;
   currentLevel?: root.TLevels;
   onPress: () => void;
+  marginTop?: 10 | 50 | undefined;
 }
 
-const MenuButton: FC<IMenuButtonProps> = ({ title, onPress, currentLevel }) => {
+const MenuButton: FC<IMenuButtonProps> = ({ title, onPress, currentLevel, marginTop }) => {
   const isActive = title === currentLevel;
   const { colors } = SETTINGS_DEFAULT;
 
@@ -20,6 +21,7 @@ const MenuButton: FC<IMenuButtonProps> = ({ title, onPress, currentLevel }) => {
         style={{
           ...styles.menuButton,
           backgroundColor: isActive ? colors.main : colors.second,
+          marginTop,
         }}
       >
         <TextCustom style={{ color: isActive ? colors.second : colors.main }}>

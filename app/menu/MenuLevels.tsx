@@ -37,6 +37,7 @@ const MenuLevels: FC<IMenuLevelsProps> = ({ onPressSetLevel, onPressGoToStep, cu
         title={'<- go to menu'}
         onPress={() => onPressGoToStep('menu')}
         currentLevel={currentLevel}
+        marginTop={50}
       />
     </Layout>
   );

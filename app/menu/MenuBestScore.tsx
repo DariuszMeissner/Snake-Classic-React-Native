@@ -14,9 +14,9 @@ const MenuBestScore: FC<IMenuBestScore> = ({ onPress, bestResult }) => {
     <Layout>
       <TextCustom style={styles.header}>Best result</TextCustom>
 
-      <TextCustom style={styles.score}>{bestResult}</TextCustom>
+      <TextCustom>{bestResult}</TextCustom>
 
-      <MenuButton title={'<- go to menu'} onPress={() => onPress('menu')} />
+      <MenuButton title={'<- go to menu'} onPress={() => onPress('menu')} marginTop={50} />
     </Layout>
   );
 };
@@ -24,9 +24,6 @@ const MenuBestScore: FC<IMenuBestScore> = ({ onPress, bestResult }) => {
 const styles = StyleSheet.create({
   header: {
     paddingBottom: 20,
-  },
-  score: {
-    paddingBottom: 50,
   },
 });
 
