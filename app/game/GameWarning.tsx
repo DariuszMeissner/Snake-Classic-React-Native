@@ -20,7 +20,7 @@ const GameWarning = () => {
 
   return (
     <Layout style={{ ...styles.gameWarning, ...animationStyles }}>
-      <TextCustom>game is stopped</TextCustom>
+      <TextCustom size={14}>game is stopped</TextCustom>
     </Layout>
   );
 };
