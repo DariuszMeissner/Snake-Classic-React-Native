@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { SETTINGS_DEFAULT } from '../constant/settingsDefault';
 
 interface ISpaceProps {
-  value?: 10 | 50 | undefined;
+  value?: 20 | 50 | undefined;
 }
 
 const Space: FC<ISpaceProps> = ({ value }) => {
