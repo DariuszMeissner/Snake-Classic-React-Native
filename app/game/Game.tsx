@@ -109,9 +109,9 @@ const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen }) 
     if (board.direction === 'down') snakeHead.x += 1;
 
     if (snakeHead.x < 0) snakeHead.x = numberOfRows - 1;
-    if (snakeHead.x >= numberOfRows) snakeHead.x = 0;
+    if (snakeHead.x >= numberOfRows - 1) snakeHead.x = 0;
     if (snakeHead.y < 0) snakeHead.y = numberOfColumn - 1;
-    if (snakeHead.y >= numberOfColumn) snakeHead.y = 0;
+    if (snakeHead.y >= numberOfColumn - 1) snakeHead.y = 0;
 
     newSnakeBody.push(snakeHead);
     newSnakeBody.shift();
