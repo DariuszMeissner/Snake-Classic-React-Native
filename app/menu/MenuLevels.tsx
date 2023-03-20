@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Layout } from '../../components';
+import { Layout, Space } from '../../components';
 import { root } from '../root.interface';
 import MenuButton from './MenuButton';
 
@@ -33,11 +33,12 @@ const MenuLevels: FC<IMenuLevelsProps> = ({ onPressSetLevel, onPressGoToStep, cu
         currentLevel={currentLevel}
       />
 
+      <Space />
+
       <MenuButton
         title={'<- go to menu'}
         onPress={() => onPressGoToStep('menu')}
         currentLevel={currentLevel}
-        marginTop={50}
       />
     </Layout>
   );
