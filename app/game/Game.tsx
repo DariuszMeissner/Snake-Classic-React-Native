@@ -87,8 +87,9 @@ const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen }) 
   function updateFrame(): void {
     let newRows = generateRows();
 
-    // set position food and snakebody
+    // set position snakebody
     board.snakeBody.forEach((el) => (newRows[el.x][el.y] = 'snakeBody'));
+    // set position food
     newRows[board.food.x][board.food.y] = 'food';
 
     setBoard((prev) => ({ ...prev, rows: newRows }));
@@ -113,7 +114,6 @@ const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen }) 
     if (snakeHead.y < 0) snakeHead.y = numberOfColumn - 2;
     if (snakeHead.y >= numberOfColumn - 1) snakeHead.y = 0;
 
-    console.log(numberOfColumn, snakeHead.y);
     newSnakeBody.push(snakeHead);
     newSnakeBody.shift();
 
@@ -161,9 +161,13 @@ const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen }) 
     for (let i = 0; i < snakeBody.length - 3; i++) {
       let isColision = snakeHead.x === snakeBody[i].x && snakeHead.y === snakeBody[i].y;
       if (isColision) {
-        setBoard((prev) => ({ ...prev, gameOver: true }));
+        finishTheGame();
       }
     }
+  }
+
+  function finishTheGame(): void {
+    setBoard((prev) => ({ ...prev, gameOver: true }));
   }
 
   function resumeGame(): void {
@@ -208,7 +212,11 @@ const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen }) 
     <View style={styles.gameContainer}>
       <GameScores result={board.points} />
       <GameBoard>{drawBoard()}</GameBoard>
-      <GameControl changeDirection={changeDirection} currentDirection={board.direction} />
+      <GameControl
+        changeDirection={changeDirection}
+        currentDirection={board.direction}
+        gameOver={showGameOverScreen}
+      />
 
       {board.gameIsStopped && <GameWarning />}
     </View>

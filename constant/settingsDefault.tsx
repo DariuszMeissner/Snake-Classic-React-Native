@@ -2,6 +2,11 @@ import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimen
 
 const BLOCK_SIZE = 20;
 const BORDER_WIDTH = 1;
+const HEIGHT = {
+  scores: 5,
+  board: 60,
+  control: 35,
+};
 
 export const SETTINGS_DEFAULT = {
   app: {
@@ -20,15 +25,15 @@ export const SETTINGS_DEFAULT = {
   fontName: 'PressStart2P-Regular',
   layout: {
     heightSection: {
-      scores: responsiveHeight(5),
-      board: responsiveHeight(70),
-      control: responsiveHeight(25),
+      scores: responsiveHeight(HEIGHT.scores),
+      board: responsiveHeight(HEIGHT.board),
+      control: responsiveHeight(HEIGHT.control),
     },
     board: {
       blockSize: BLOCK_SIZE,
       borderWidth: BORDER_WIDTH,
       numberOfColumn: Math.floor(responsiveWidth(100) / BLOCK_SIZE),
-      numberOfRows: Math.floor(responsiveHeight(70) / BLOCK_SIZE),
+      numberOfRows: Math.floor(responsiveHeight(HEIGHT.board) / BLOCK_SIZE),
       snakeStartPosition: { x: 0, y: 0 },
     },
     maxWidth: 500,
