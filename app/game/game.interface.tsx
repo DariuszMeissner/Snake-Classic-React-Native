@@ -1,4 +1,4 @@
-export namespace GameSettings {
+export namespace NGame {
   export interface IBoard {
     rows: string[][];
     snakeBody: ICordinates[];

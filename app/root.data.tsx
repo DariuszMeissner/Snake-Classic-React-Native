@@ -1,6 +1,6 @@
-import { root } from './root.interface';
+import { NRoot } from './root.interface';
 
-export const APP_INIT: root.IApp = {
+export const APP_INIT: NRoot.IApp = {
   step: {
     name: 'menu',
     menu: true,
@@ -11,7 +11,7 @@ export const APP_INIT: root.IApp = {
   },
   heighestScore: 0,
   currentScore: 0,
-  speed: root.SpeedLevel.medium,
+  speed: NRoot.SpeedLevel.medium,
   currentLevel: {
     name: 'medium',
     veryHeight: false,

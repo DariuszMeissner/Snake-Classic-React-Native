@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import Game from './game/Game';
 import Menu from './menu/Menu';
-import { root } from './root.interface';
+import { NRoot } from './root.interface';
 import { MenuBestScore, MenuLevels } from './menu';
 import { APP_INIT } from './root.data';
 import { GameOver } from './game';
@@ -14,7 +14,7 @@ interface IRootProps {
 
 const Root: FC<IRootProps> = ({ storageBestScore }) => {
   const { setItem } = useAsyncStorage('@storage_key');
-  const [appState, setAppState] = useState<root.IApp>(APP_INIT);
+  const [appState, setAppState] = useState<NRoot.IApp>(APP_INIT);
 
   useEffect(() => {
     setAppState((prev) => ({ ...prev, heighestScore: Number(storageBestScore) }));
@@ -24,7 +24,7 @@ const Root: FC<IRootProps> = ({ storageBestScore }) => {
     await setItem(score);
   };
 
-  function goToStep(activeStep: root.TSteps): void {
+  function goToStep(activeStep: NRoot.TSteps): void {
     setAppState((prev) => ({
       ...prev,
       step: {
@@ -38,12 +38,12 @@ const Root: FC<IRootProps> = ({ storageBestScore }) => {
     }));
   }
 
-  function setCurrentLevel(currentLevel: root.TLevels): void {
-    const levelAsIndex: keyof typeof root.SpeedLevel = currentLevel;
+  function setCurrentLevel(currentLevel: NRoot.TLevels): void {
+    const levelAsIndex: keyof typeof NRoot.SpeedLevel = currentLevel;
 
     setAppState((prev) => ({
       ...prev,
-      speed: root.SpeedLevel[levelAsIndex],
+      speed: NRoot.SpeedLevel[levelAsIndex],
       currentLevel: {
         name: currentLevel,
         veryHeight: currentLevel === 'veryHeight',
@@ -58,13 +58,9 @@ const Root: FC<IRootProps> = ({ storageBestScore }) => {
     return score > appState.heighestScore ? score : appState.heighestScore;
   }
 
-  function setCurrentScore(score: number): number {
-    return score;
-  }
-
   function setHeighestScore(score: number): void {
     const newScore = checkHeighestScore(score);
-    const currentScore = setCurrentScore(score);
+    const currentScore = score;
 
     setAppState((prev) => ({
       ...prev,
@@ -75,7 +71,7 @@ const Root: FC<IRootProps> = ({ storageBestScore }) => {
     writeItemToStorage(newScore.toString());
   }
 
-  function goToMenuAndSetLevel(currentLevel: root.TLevels): void {
+  function goToMenuAndSetLevel(currentLevel: NRoot.TLevels): void {
     goToStep('menu');
     setCurrentLevel(currentLevel);
   }
@@ -89,6 +85,7 @@ const Root: FC<IRootProps> = ({ storageBestScore }) => {
           speedOfGame={appState.speed}
           setHeighestScore={setHeighestScore}
           showGameOverScreen={goToStep}
+          currentLevel={appState.currentLevel.name}
         />
       )}
 

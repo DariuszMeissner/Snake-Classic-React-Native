@@ -8,10 +8,13 @@ import Root from './app/Root';
 import { CUSTOM_FONTS, SETTINGS_DEFAULT } from './constant/settingsDefault';
 import { StatusBar } from 'expo-status-bar';
 
+const TIME_OF_SPLASH_SCREEN = 1000;
+
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
+  const [error, setError] = useState<any>(null);
   const [appIsReady, setAppIsReady] = useState(false);
   const [storageScore, setStorageScore] = useState<string>('');
   const { getItem } = useAsyncStorage('@storage_key');
@@ -21,7 +24,7 @@ export default function App() {
   };
 
   const extendShowingScreen = async () => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, TIME_OF_SPLASH_SCREEN));
   };
 
   const readItemFromStorage = async () => {
@@ -32,21 +35,21 @@ export default function App() {
     }
   };
 
-  useEffect(() => {
-    async function prepare() {
-      try {
-        // Pre-load fonts, make any API calls you need to do here
-        loadFont();
-        readItemFromStorage();
-        extendShowingScreen();
-      } catch (e) {
-        console.warn(e);
-      } finally {
-        // Tell the application to render
-        setAppIsReady(true);
-      }
+  const prepare = async () => {
+    try {
+      // Pre-load fonts, make any API calls you need to do here
+      loadFont();
+      readItemFromStorage();
+      extendShowingScreen();
+    } catch (err) {
+      setError(err);
+    } finally {
+      // Tell the application to render
+      setAppIsReady(true);
     }
+  };
 
+  useEffect(() => {
     prepare();
   }, []);
 
@@ -56,6 +59,7 @@ export default function App() {
     }
   }, [appIsReady]);
 
+  // at browser
   if (!appIsReady) {
     return (
       <View>
@@ -80,6 +84,7 @@ export default function App() {
 
 const styles = StyleSheet.create({
   root: {
+    overflow: 'hidden',
     backgroundColor: SETTINGS_DEFAULT.colors.second,
     height: SETTINGS_DEFAULT.app.height,
     width: SETTINGS_DEFAULT.app.width,
