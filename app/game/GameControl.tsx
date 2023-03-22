@@ -1,26 +1,26 @@
 import React, { FC } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { SETTINGS_DEFAULT } from '../../constant/settingsDefault';
-import { root } from '../root.interface';
-import { GameSettings } from './game.interface';
+import { NRoot } from '../root.interface';
+import { NGame } from './game.interface';
 import GameButton from './GameButton';
 
 interface IGameControlProps {
-  currentDirection: GameSettings.TDirection;
-  changeDirection?: (key: GameSettings.TDirection) => void;
-  gameOver?: (activeStep: root.TSteps) => void;
+  currentDirection: NGame.TDirection;
+  changeDirection?: (key: NGame.TDirection) => void;
+  gameOver?: (activeStep: NRoot.TSteps) => void;
 }
 
 const GameControl: FC<IGameControlProps> = ({
-  changeDirection = () => {},
   currentDirection,
+  changeDirection = () => {},
   gameOver = () => {},
 }) => {
   const isStart = currentDirection != 'stop';
   return (
     <View style={styles.gameContainer}>
       <View style={styles.finishGameButton}>
-        <GameButton title={`finish\nthe game`} onPress={() => gameOver('gameOver')} invertColors />
+        <GameButton title={`finish`} onPress={() => gameOver('gameOver')} invertColors />
       </View>
 
       <View style={styles.gameNav}>

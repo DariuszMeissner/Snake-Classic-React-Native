@@ -2,18 +2,19 @@ import React, { FC, useEffect, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { GameBoard, GameControl, GameScores, GameWarning } from '.';
 import { SETTINGS_DEFAULT } from '../../constant/settingsDefault';
-import { root } from '../root.interface';
-import { GameSettings } from './game.interface';
+import { NRoot } from '../root.interface';
+import { NGame } from './game.interface';
 
 interface IGame {
   speedOfGame: number;
   setHeighestScore: (score: number) => void;
-  showGameOverScreen: (activeStep: root.TSteps) => void;
+  showGameOverScreen: (activeStep: NRoot.TSteps) => void;
+  currentLevel: NRoot.TLevels;
 }
 
-const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen }) => {
+const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen, currentLevel }) => {
   const intervalRef = useRef<any>(null);
-  const [board, setBoard] = useState<GameSettings.IBoard>({
+  const [board, setBoard] = useState<NGame.IBoard>({
     rows: generateRows(),
     snakeBody: [SETTINGS_DEFAULT.snakeStartPosition],
     food: generatePosition(),
@@ -52,21 +53,14 @@ const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen }) 
     );
   }
 
-  function generatePosition(): GameSettings.ICordinates {
-    return {
-      x: Math.floor(Math.random() * SETTINGS_DEFAULT.layout.board.numberOfRows),
-      y: Math.floor(Math.random() * SETTINGS_DEFAULT.layout.board.numberOfColumn),
-    };
-  }
-
-  function saveLastDirection(direction: GameSettings.TDirection): void {
+  function saveLastDirection(direction: NGame.TDirection): void {
     if (direction != 'stop') {
       setBoard((prev) => ({ ...prev, lastDirection: direction }));
     }
   }
 
-  function changeDirection(key: GameSettings.TDirection): void {
-    let currentDirection: GameSettings.TDirection = board.direction;
+  function changeDirection(key: NGame.TDirection): void {
+    let currentDirection: NGame.TDirection = board.direction;
 
     if (board.direction != 'stop') {
       if (key === 'left') currentDirection = board.direction === 'right' ? 'right' : 'left';
@@ -122,36 +116,77 @@ const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen }) 
     updateFrame();
   }
 
+  function generatePosition(): NGame.ICordinates {
+    const { numberOfRows, numberOfColumn } = SETTINGS_DEFAULT.layout.board;
+
+    let postion = {
+      x: Math.floor(Math.random() * numberOfRows),
+      y: Math.floor(Math.random() * numberOfColumn),
+    };
+
+    return checkRangeNewPositionOfFood(postion);
+  }
+
+  function checkRangeNewPositionOfFood(position: NGame.ICordinates): NGame.ICordinates {
+    const { numberOfRows, numberOfColumn } = SETTINGS_DEFAULT.layout.board;
+
+    let x = position.x >= numberOfRows ? position.x - 1 : position.x;
+    let y = position.y >= numberOfColumn - 1 ? position.y - 2 : position.y;
+
+    return { x, y };
+  }
+
+  function checkPositionFoodAtSnakeReturnNew(
+    snakeBody: NGame.ICordinates[],
+    foodPosition: NGame.ICordinates
+  ): NGame.ICordinates {
+    let newFoodPosition = foodPosition;
+
+    for (let i = 0; i < snakeBody.length; i++) {
+      if (snakeBody[i].x === newFoodPosition.x) {
+        newFoodPosition.x = Math.floor(Math.random() * SETTINGS_DEFAULT.layout.board.numberOfRows);
+      }
+
+      if (snakeBody[i].y === newFoodPosition.y) {
+        newFoodPosition.y = Math.floor(
+          Math.random() * SETTINGS_DEFAULT.layout.board.numberOfColumn
+        );
+      }
+    }
+
+    return checkRangeNewPositionOfFood(newFoodPosition);
+  }
+
   function onEatingFood(): void {
-    const { numberOfColumn, numberOfRows } = SETTINGS_DEFAULT.layout.board;
     let newPositionFood = generatePosition();
     let newSnakeBody = board.snakeBody;
     let snakeHead = { ...newSnakeBody[newSnakeBody.length - 1] };
-    const { food } = board;
 
-    if (snakeHead.x === food.x && snakeHead.y === food.y) {
+    if (snakeHead.x === board.food.x && snakeHead.y === board.food.y) {
       newSnakeBody.push(snakeHead);
 
-      updateScores();
+      updateScores(currentLevel);
 
       // check colision food with snake
-      // and generate new one
-      for (let i = 0; i < newSnakeBody.length; i++) {
-        if (newSnakeBody[i].x === newPositionFood.x) {
-          newPositionFood.x = Math.floor(Math.random() * numberOfRows);
-        }
-
-        if (newSnakeBody[i].y === newPositionFood.y) {
-          newPositionFood.y = Math.floor(Math.random() * numberOfColumn);
-        }
-      }
-
-      setBoard((prev) => ({ ...prev, snakeBody: newSnakeBody, food: newPositionFood }));
+      newPositionFood = checkPositionFoodAtSnakeReturnNew(newSnakeBody, newPositionFood);
+      setPositionOfFoodAndSnake(newSnakeBody, newPositionFood);
     }
   }
 
-  function updateScores(): void {
-    setBoard((prev) => ({ ...prev, points: prev.points + 1 }));
+  function setPositionOfFoodAndSnake(
+    snakeBody: NGame.ICordinates[],
+    food: NGame.ICordinates
+  ): void {
+    setBoard((prev) => ({ ...prev, snakeBody, food }));
+  }
+
+  function updateScores(currentLevel: NRoot.TLevels): void {
+    const pointlAsIndex: keyof typeof NRoot.PointRate = currentLevel;
+
+    setBoard((prev) => ({
+      ...prev,
+      points: prev.points + NRoot.PointRate[pointlAsIndex],
+    }));
   }
 
   function detectCollisionSnakeAtSnake(): void {
@@ -215,7 +250,7 @@ const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen }) 
       <GameControl
         changeDirection={changeDirection}
         currentDirection={board.direction}
-        gameOver={showGameOverScreen}
+        gameOver={gameOver}
       />
 
       {board.gameIsStopped && <GameWarning />}
