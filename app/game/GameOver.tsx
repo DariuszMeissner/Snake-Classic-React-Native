@@ -1,9 +1,9 @@
 import React, { FC, useEffect } from 'react';
 import { Layout, Space, TextCustom } from '../../components';
-import { root } from '../root.interface';
+import { NRoot } from '../root.interface';
 
 interface IGameOverProps {
-  goToMenu: (activeStep: root.TSteps) => void;
+  goToMenu: (activeStep: NRoot.TSteps) => void;
   currentResult: number;
 }
 

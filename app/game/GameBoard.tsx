@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { StyleSheet } from 'react-native';
-import { View, ViewStyle } from 'react-native';
+import { View } from 'react-native';
 import { SETTINGS_DEFAULT } from '../../constant/settingsDefault';
 
 interface IGameBoardProps {

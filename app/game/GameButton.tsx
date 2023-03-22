@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { TouchableHighlight, View, Text, StyleSheet } from 'react-native';
+import { TouchableHighlight, View, StyleSheet } from 'react-native';
 import { TextCustom } from '../../components';
 import { SETTINGS_DEFAULT } from '../../constant/settingsDefault';
 
