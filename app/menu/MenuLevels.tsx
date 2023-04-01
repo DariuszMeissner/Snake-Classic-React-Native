@@ -1,12 +1,12 @@
 import React, { FC } from 'react';
 import { Layout, Space } from '../../components';
-import { root } from '../root.interface';
+import { NRoot } from '../root.interface';
 import MenuButton from './MenuButton';
 
 interface IMenuLevelsProps {
-  currentLevel: root.TLevels;
-  onPressSetLevel: (level: root.TLevels) => void;
-  onPressGoToStep: (level: root.TSteps) => void;
+  currentLevel: NRoot.TLevels;
+  onPressSetLevel: (level: NRoot.TLevels) => void;
+  onPressGoToStep: (level: NRoot.TSteps) => void;
 }
 
 const MenuLevels: FC<IMenuLevelsProps> = ({ onPressSetLevel, onPressGoToStep, currentLevel }) => {

@@ -4,10 +4,10 @@ export namespace NRoot {
   export type TSpeed = 30 | 60 | 120 | 240;
 
   export enum SpeedLevel {
-    veryHeight = 40,
-    height = veryHeight * 2,
-    medium = height * 2,
-    easy = medium * 2,
+    veryHeight = 45,
+    height = veryHeight * 1.5,
+    medium = height * 1.5,
+    easy = medium * 1.5,
   }
 
   export enum PointRate {

@@ -1,12 +1,12 @@
 import React, { FC } from 'react';
 import { StyleSheet } from 'react-native';
 import { Layout, Space, TextCustom } from '../../components';
-import { root } from '../root.interface';
+import { NRoot } from '../root.interface';
 import MenuButton from './MenuButton';
 
 interface IMenuBestScore {
   bestResult: number;
-  onPress: (step: root.TSteps) => void;
+  onPress: (step: NRoot.TSteps) => void;
 }
 
 const MenuBestScore: FC<IMenuBestScore> = ({ onPress, bestResult }) => {

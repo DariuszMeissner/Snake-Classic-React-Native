@@ -2,11 +2,11 @@ import React, { FC } from 'react';
 import { StyleSheet, TouchableHighlight, View } from 'react-native';
 import { TextCustom } from '../../components';
 import { SETTINGS_DEFAULT } from '../../constant/settingsDefault';
-import { root } from '../root.interface';
+import { NRoot } from '../root.interface';
 
 interface IMenuButtonProps {
-  title: root.TSteps | root.TLevels | string;
-  currentLevel?: root.TLevels;
+  title: NRoot.TSteps | NRoot.TLevels | string;
+  currentLevel?: NRoot.TLevels;
   onPress: () => void;
 }
 
@@ -31,7 +31,7 @@ const MenuButton: FC<IMenuButtonProps> = ({ title, onPress, currentLevel }) => {
 };
 
 const styles = StyleSheet.create({
-  menuButton: { padding: 16 },
+  menuButton: { padding: 20 },
 });
 
 export default MenuButton;

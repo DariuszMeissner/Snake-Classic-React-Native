@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, ViewStyle } from 'react-native';
 import { Layout, TextCustom } from '../../components';
+import { SETTINGS_DEFAULT } from '../../constant/settingsDefault';
 
 const GameWarning = () => {
   const [showWarning, setShowWarning] = useState<boolean>(true);
@@ -11,16 +12,16 @@ const GameWarning = () => {
   };
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
+    const blinkingWarning = setInterval(() => {
       setShowWarning((prev) => !prev);
     }, timeOfBlinking);
 
-    return () => clearInterval(intervalId);
+    return () => clearInterval(blinkingWarning);
   }, []);
 
   return (
     <Layout style={{ ...styles.gameWarning, ...animationStyles }}>
-      <TextCustom size={14}>game is stopped</TextCustom>
+      <TextCustom size={18}>game is stopped</TextCustom>
     </Layout>
   );
 };
@@ -28,7 +29,9 @@ const GameWarning = () => {
 const styles = StyleSheet.create({
   gameWarning: {
     position: 'absolute',
-    height: 'auto',
+    top:
+      (SETTINGS_DEFAULT.layout.heightSection.board + SETTINGS_DEFAULT.layout.heightSection.scores) /
+      2,
   },
 });
 export default GameWarning;

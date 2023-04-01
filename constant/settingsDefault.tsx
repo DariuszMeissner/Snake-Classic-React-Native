@@ -1,21 +1,29 @@
 import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 
-const BLOCK_SIZE = 20;
-const BORDER_WIDTH = 1;
-const HEIGHT = {
-  scores: 5,
-  board: 60,
-  control: 35,
+const INIT = {
+  blockSize: 20,
+  borderWidth: 1,
+  height: {
+    scores: 5,
+    board: 55,
+    control: 40,
+  },
+  maxWidth: 500,
+  responsiveWidthMax: responsiveWidth(100) > 500 ? 500 : responsiveWidth(100),
+  responsiveHeightMax: responsiveHeight(100),
+  screenWidthMax: responsiveWidth(100),
 };
 
 export const SETTINGS_DEFAULT = {
+  screenWidthMax: INIT.screenWidthMax,
   app: {
-    width: responsiveWidth(100),
-    height: responsiveHeight(100),
+    width: INIT.responsiveWidthMax,
+    height: INIT.responsiveHeightMax,
     content: {
       width:
-        Math.floor(responsiveWidth(100) / BLOCK_SIZE) * BLOCK_SIZE + 2 * BORDER_WIDTH - BLOCK_SIZE,
-      height: {},
+        Math.floor(INIT.responsiveWidthMax / INIT.blockSize) * INIT.blockSize +
+        2 * INIT.borderWidth -
+        INIT.blockSize,
     },
   },
   colors: {
@@ -25,18 +33,17 @@ export const SETTINGS_DEFAULT = {
   fontName: 'PressStart2P-Regular',
   layout: {
     heightSection: {
-      scores: responsiveHeight(HEIGHT.scores),
-      board: responsiveHeight(HEIGHT.board),
-      control: responsiveHeight(HEIGHT.control),
+      scores: responsiveHeight(INIT.height.scores),
+      board: responsiveHeight(INIT.height.board),
+      control: responsiveHeight(INIT.height.control),
     },
     board: {
-      blockSize: BLOCK_SIZE,
-      borderWidth: BORDER_WIDTH,
-      numberOfColumn: Math.floor(responsiveWidth(100) / BLOCK_SIZE),
-      numberOfRows: Math.floor(responsiveHeight(HEIGHT.board) / BLOCK_SIZE),
+      blockSize: INIT.blockSize,
+      borderWidth: INIT.borderWidth,
+      numberOfColumn: Math.floor(INIT.responsiveWidthMax / INIT.blockSize),
+      numberOfRows: Math.floor(responsiveHeight(INIT.height.board) / INIT.blockSize),
       snakeStartPosition: { x: 0, y: 0 },
     },
-    maxWidth: 500,
   },
   snakeStartPosition: { x: 0, y: 0 },
 };
