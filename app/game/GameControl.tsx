@@ -19,10 +19,6 @@ const GameControl: FC<IGameControlProps> = ({
   const isStart = currentDirection != 'stop';
   return (
     <View style={styles.gameContainer}>
-      <View style={styles.finishGameButton}>
-        <GameButton title={`finish`} onPress={() => gameOver('gameOver')} invertColors />
-      </View>
-
       <View style={styles.gameNav}>
         <View>
           <GameButton title="up" onPress={() => changeDirection('up')} />
@@ -42,6 +38,12 @@ const GameControl: FC<IGameControlProps> = ({
           <GameButton title="down" onPress={() => changeDirection('down')} />
         </View>
       </View>
+
+      <View style={styles.finishGameContainer}>
+        <View style={styles.finishGameButton}>
+          <GameButton title={`finish`} onPress={() => gameOver('gameOver')} invertColors />
+        </View>
+      </View>
     </View>
   );
 };
@@ -56,9 +58,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  finishGameContainer: {
+    borderTopColor: SETTINGS_DEFAULT.colors.main,
+    borderTopWidth: SETTINGS_DEFAULT.layout.board.borderWidth,
+  },
   finishGameButton: {
-    borderBottomColor: SETTINGS_DEFAULT.colors.main,
-    borderBottomWidth: SETTINGS_DEFAULT.layout.board.borderWidth,
+    width: '30%',
+    height: '95%',
   },
   row: {
     flexDirection: 'row',

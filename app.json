@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "snake-classic",
-    "slug": "snake",
+    "name": "Snake Classic game",
+    "slug": "SnakeClassicGame",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -16,6 +16,8 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.snakeclassicgame",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#8fa37e"

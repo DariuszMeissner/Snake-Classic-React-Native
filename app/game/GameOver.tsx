@@ -18,7 +18,7 @@ const GameOver: FC<IGameOverProps> = ({ goToMenu, currentResult }) => {
     <Layout>
       <TextCustom>Game Over</TextCustom>
       <Space value={20} />
-      <TextCustom size={14}>Your result:&nbsp;{currentResult}</TextCustom>
+      <TextCustom size={18}>Your result:&nbsp;{currentResult}</TextCustom>
     </Layout>
   );
 };

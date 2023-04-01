@@ -9,6 +9,9 @@ interface IButtonNavProps {
   invertColors?: boolean;
 }
 
+const NUMBER_OF_ROW = 4;
+const NUMBER_OF_COL = 3;
+
 const GameButton: FC<IButtonNavProps> = ({ title, onPress, invertColors = false }) => {
   const { colors } = SETTINGS_DEFAULT;
 
@@ -30,8 +33,8 @@ const GameButton: FC<IButtonNavProps> = ({ title, onPress, invertColors = false 
 
 const styles = StyleSheet.create({
   button: {
-    height: SETTINGS_DEFAULT.layout.heightSection.control / 4,
-    width: SETTINGS_DEFAULT.app.content.width / 3,
+    height: Math.floor(SETTINGS_DEFAULT.layout.heightSection.control / NUMBER_OF_ROW),
+    width: Math.floor(SETTINGS_DEFAULT.app.content.width / NUMBER_OF_COL),
     justifyContent: 'center',
     alignItems: 'center',
   },

@@ -31,7 +31,7 @@ const MenuButton: FC<IMenuButtonProps> = ({ title, onPress, currentLevel }) => {
 };
 
 const styles = StyleSheet.create({
-  menuButton: { padding: 16 },
+  menuButton: { padding: 20 },
 });
 
 export default MenuButton;

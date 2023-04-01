@@ -70,11 +70,13 @@ export default function App() {
 
   return (
     <React.StrictMode>
-      <SafeAreaProvider>
+      <SafeAreaProvider style={styles.app}>
         <SafeAreaView>
-          <View style={styles.root} onLayout={onLayoutRootView}>
-            <Root storageBestScore={storageScore} />
-            <StatusBar style={'dark'} />
+          <View nativeID="app">
+            <View onLayout={onLayoutRootView}>
+              <Root storageBestScore={storageScore} />
+              <StatusBar style={'dark'} />
+            </View>
           </View>
         </SafeAreaView>
       </SafeAreaProvider>
@@ -83,10 +85,12 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
-  root: {
-    overflow: 'hidden',
-    backgroundColor: SETTINGS_DEFAULT.colors.second,
+  app: {
+    width: SETTINGS_DEFAULT.screenWidthMax,
     height: SETTINGS_DEFAULT.app.height,
-    width: SETTINGS_DEFAULT.app.width,
+    backgroundColor: SETTINGS_DEFAULT.colors.second,
+    display: 'flex',
+    justifyContent: 'center',
+    overflow: 'hidden',
   },
 });
