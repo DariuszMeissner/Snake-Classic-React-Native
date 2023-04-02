@@ -19,10 +19,6 @@ export default function App() {
   const [storageScore, setStorageScore] = useState<string>('');
   const { getItem } = useAsyncStorage('@storage_key');
 
-  const loadFont = async () => {
-    await Font.loadAsync(CUSTOM_FONTS);
-  };
-
   const extendShowingScreen = async () => {
     await new Promise((resolve) => setTimeout(resolve, TIME_OF_SPLASH_SCREEN));
   };
@@ -38,7 +34,7 @@ export default function App() {
   const prepare = async () => {
     try {
       // Pre-load fonts, make any API calls you need to do here
-      loadFont();
+      await Font.loadAsync(CUSTOM_FONTS);
       readItemFromStorage();
       extendShowingScreen();
     } catch (err) {

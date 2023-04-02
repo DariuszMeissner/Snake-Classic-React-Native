@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { GameBoard, GameControl, GameScores, GameWarning } from '.';
 import { SETTINGS_DEFAULT } from '../../constant/settingsDefault';
@@ -13,11 +13,12 @@ interface IGame {
 }
 
 const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen, currentLevel }) => {
+  const requestRef = useRef<any>(null);
   const intervalRef = useRef<any>(null);
   const [board, setBoard] = useState<NGame.IBoard>({
-    rows: generateRows(),
+    rows: null,
     snakeBody: [SETTINGS_DEFAULT.snakeStartPosition],
-    food: generatePosition(),
+    food: null,
     direction: 'right',
     lastDirection: 'right',
     gameOver: false,
@@ -25,31 +26,17 @@ const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen, cu
     gameIsStopped: false,
   });
 
+  useLayoutEffect(() => {
+    setBoard((prev) => ({
+      ...prev,
+      rows: generateRows(),
+      food: generatePosition(),
+    }));
+  }, []);
+
   function generateRows(): string[][] {
     return [...Array(SETTINGS_DEFAULT.layout.board.numberOfRows)].map((_) =>
       [...Array(SETTINGS_DEFAULT.layout.board.numberOfColumn)].map((_) => 'gridItem')
-    );
-  }
-
-  function setColorOfBoardElements(val: string): string {
-    return val === 'snakeBody' || val === 'food'
-      ? SETTINGS_DEFAULT.colors.main
-      : SETTINGS_DEFAULT.colors.second;
-  }
-
-  function drawBoard(): JSX.Element[][] {
-    return board.rows.map((row, i) =>
-      row.map((value, j) =>
-        j === SETTINGS_DEFAULT.layout.board.numberOfColumn - 1 ? (
-          <View key={`${i * j * j}`} style={styles.gridBreak} />
-        ) : (
-          <View
-            key={`${i}-${j}`}
-            nativeID={`${i}-${j}`}
-            style={{ ...styles.gridItem, backgroundColor: setColorOfBoardElements(value) }}
-          />
-        )
-      )
     );
   }
 
@@ -69,12 +56,13 @@ const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen, cu
       if (key === 'down') currentDirection = board.direction === 'up' ? 'up' : 'down';
       if (key === 'stop') currentDirection = 'stop';
     }
+
     if (key === 'start') {
       currentDirection = board.lastDirection;
       resumeGame();
     }
-    setBoard((prev) => ({ ...prev, direction: currentDirection }));
 
+    setBoard((prev) => ({ ...prev, direction: currentDirection }));
     saveLastDirection(currentDirection);
   }
 
@@ -82,9 +70,12 @@ const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen, cu
     let newRows = generateRows();
 
     // set position snakebody
-    board.snakeBody.forEach((el) => (newRows[el.x][el.y] = 'snakeBody'));
+    board.snakeBody.forEach((el) => {
+      newRows[el.x][el.y] = 'snakeBody';
+    });
     // set position food
-    newRows[board.food.x][board.food.y] = 'food';
+
+    if (board.food) newRows[board.food.x][board.food.y] = 'food';
 
     setBoard((prev) => ({ ...prev, rows: newRows }));
   }
@@ -158,18 +149,21 @@ const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen, cu
   }
 
   function onEatingFood(): void {
-    let newPositionFood = generatePosition();
-    let newSnakeBody = board.snakeBody;
-    let snakeHead = { ...newSnakeBody[newSnakeBody.length - 1] };
+    if (board.food) {
+      let newSnakeBody = board.snakeBody;
+      let snakeHead = { ...newSnakeBody[newSnakeBody.length - 1] };
 
-    if (snakeHead.x === board.food.x && snakeHead.y === board.food.y) {
-      newSnakeBody.push(snakeHead);
+      if (snakeHead.x === board.food.x && snakeHead.y === board.food.y) {
+        let newPositionFood = generatePosition();
 
-      updateScores(currentLevel);
+        newSnakeBody.push(snakeHead);
 
-      // check colision food with snake
-      newPositionFood = checkPositionFoodAtSnakeReturnNew(newSnakeBody, newPositionFood);
-      setPositionOfFoodAndSnake(newSnakeBody, newPositionFood);
+        updateScores(currentLevel);
+
+        // check colision food with snake
+        newPositionFood = checkPositionFoodAtSnakeReturnNew(newSnakeBody, newPositionFood);
+        setPositionOfFoodAndSnake(newSnakeBody, newPositionFood);
+      }
     }
   }
 
@@ -210,6 +204,7 @@ const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen, cu
   }
 
   function stopGame() {
+    cancelAnimationFrame(requestRef.current);
     clearInterval(intervalRef.current);
   }
 
@@ -236,17 +231,21 @@ const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen, cu
     }
 
     if (board.gameOver) {
+      cancelAnimationFrame(requestRef.current);
       clearInterval(intervalRef.current);
       gameOver();
     }
 
-    return () => clearInterval(intervalRef.current);
-  }, [board]);
+    return () => {
+      // cancelAnimationFrame(requestRef.current);
+      clearInterval(intervalRef.current);
+    };
+  }, [board.snakeBody]);
 
   return (
     <View style={styles.gameContainer}>
       <GameScores result={board.points} />
-      <GameBoard>{drawBoard()}</GameBoard>
+      <GameBoard boardRows={board.rows || [[]]} />
       <GameControl
         changeDirection={changeDirection}
         currentDirection={board.direction}
@@ -263,14 +262,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  gridBreak: {
-    flexBasis: '100%',
-    height: 0,
-  },
-  gridItem: {
-    width: SETTINGS_DEFAULT.layout.board.blockSize,
-    height: SETTINGS_DEFAULT.layout.board.blockSize,
   },
   snakeBody: {
     width: SETTINGS_DEFAULT.layout.board.blockSize,

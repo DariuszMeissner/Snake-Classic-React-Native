@@ -6,7 +6,7 @@ import { MenuBestScore, MenuLevels } from './menu';
 import { APP_INIT } from './root.data';
 import { GameOver } from './game';
 import { useAsyncStorage } from '@react-native-async-storage/async-storage';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 
 interface IRootProps {
   storageBestScore: string;

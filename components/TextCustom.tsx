@@ -1,12 +1,16 @@
 import React, { FC } from 'react';
 import { StyleSheet, Text, TextStyle } from 'react-native';
-import { CUSTOM_FONTS, SETTINGS_DEFAULT } from '../constant/settingsDefault';
+import { SETTINGS_DEFAULT } from '../constant/settingsDefault';
+
+type TSize = 14 | 16 | 18 | 20 | undefined;
 
 interface ITextCustom {
-  size?: 14 | 16 | 18 | 24 | undefined;
+  size?: TSize;
   style?: TextStyle;
   children: React.ReactNode;
 }
+
+const DEFAULT_SIZE: TSize = 20;
 
 const TextCustom: FC<ITextCustom> = ({ children, style, size }) => {
   return (
@@ -14,7 +18,7 @@ const TextCustom: FC<ITextCustom> = ({ children, style, size }) => {
       style={{
         ...styles.default,
         ...style,
-        fontSize: size || 24,
+        fontSize: size || DEFAULT_SIZE,
       }}
     >
       {children}
