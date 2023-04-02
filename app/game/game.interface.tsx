@@ -1,8 +1,8 @@
 export namespace NGame {
   export interface IBoard {
-    rows: string[][];
+    rows: string[][] | null;
     snakeBody: ICordinates[];
-    food: ICordinates;
+    food: ICordinates | null;
     direction: TDirection;
     lastDirection: TDirection;
     gameOver: boolean;
