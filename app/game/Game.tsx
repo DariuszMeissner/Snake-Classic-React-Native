@@ -14,7 +14,6 @@ interface IGame {
 
 const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen, currentLevel }) => {
   const intervalRef = useRef<any>(null);
-  const requestFrameRef = useRef<any>(null);
   const [board, setBoard] = useState<NGame.IBoard>({
     rows: generateRows(),
     snakeBody: [SETTINGS_DEFAULT.snakeStartPosition],
@@ -218,7 +217,6 @@ const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen, cu
   }
 
   function stopGame() {
-    // cancelAnimationFrame(requestFrameRef.current);
     clearInterval(intervalRef.current);
   }
 
@@ -236,11 +234,8 @@ const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen, cu
   useEffect(() => {
     if (!board.gameOver) {
       intervalRef.current = setInterval(moveSnake, speedOfGame);
-      // intervalRef.current = setTimeout(() => {
-      //   requestFrameRef.current = requestAnimationFrame(moveSnake);
-      // }, speedOfGame);
-      // onEatingFood();
-      // detectCollisionSnakeAtSnake();
+      onEatingFood();
+      detectCollisionSnakeAtSnake();
     }
 
     if (board.direction === 'stop') {
@@ -248,7 +243,6 @@ const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen, cu
     }
 
     if (board.gameOver) {
-      // cancelAnimationFrame(requestFrameRef.current);
       clearInterval(intervalRef.current);
       gameOver();
     }
