@@ -14,6 +14,7 @@ interface IGame {
 
 const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen, currentLevel }) => {
   const intervalRef = useRef<any>(null);
+  const requestFrameRef = useRef<any>(null);
   const [board, setBoard] = useState<NGame.IBoard>({
     rows: generateRows(),
     snakeBody: [SETTINGS_DEFAULT.snakeStartPosition],
@@ -38,19 +39,21 @@ const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen, cu
   }
 
   function drawBoard(): JSX.Element[][] {
-    return board.rows.map((row, i) =>
-      row.map((value, j) =>
-        j === SETTINGS_DEFAULT.layout.board.numberOfColumn - 1 ? (
-          <View key={`${i * j * j}`} style={styles.gridBreak} />
-        ) : (
-          <View
-            key={`${i}-${j}`}
-            nativeID={`${i}-${j}`}
-            style={{ ...styles.gridItem, backgroundColor: setColorOfBoardElements(value) }}
-          />
+    return board.rows
+      ? board.rows.map((row, i) =>
+          row.map((value, j) =>
+            j === SETTINGS_DEFAULT.layout.board.numberOfColumn - 1 ? (
+              <View key={`${i * j * j}`} style={styles.gridBreak} />
+            ) : (
+              <View
+                key={`${i}-${j}`}
+                nativeID={`${i}-${j}`}
+                style={{ ...styles.gridItem, backgroundColor: setColorOfBoardElements(value) }}
+              />
+            )
+          )
         )
-      )
-    );
+      : [[]];
   }
 
   function saveLastDirection(direction: NGame.TDirection): void {
@@ -83,8 +86,11 @@ const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen, cu
 
     // set position snakebody
     board.snakeBody.forEach((el) => (newRows[el.x][el.y] = 'snakeBody'));
+
     // set position food
-    newRows[board.food.x][board.food.y] = 'food';
+    if (board.food) {
+      newRows[board.food.x][board.food.y] = 'food';
+    }
 
     setBoard((prev) => ({ ...prev, rows: newRows }));
   }
@@ -158,18 +164,20 @@ const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen, cu
   }
 
   function onEatingFood(): void {
-    let newPositionFood = generatePosition();
-    let newSnakeBody = board.snakeBody;
-    let snakeHead = { ...newSnakeBody[newSnakeBody.length - 1] };
+    if (board.food) {
+      let newSnakeBody = board.snakeBody;
+      let snakeHead = { ...newSnakeBody[newSnakeBody.length - 1] };
 
-    if (snakeHead.x === board.food.x && snakeHead.y === board.food.y) {
-      newSnakeBody.push(snakeHead);
+      if (snakeHead.x === board.food.x && snakeHead.y === board.food.y) {
+        let newPositionFood = generatePosition();
+        newSnakeBody.push(snakeHead);
 
-      updateScores(currentLevel);
+        updateScores(currentLevel);
 
-      // check colision food with snake
-      newPositionFood = checkPositionFoodAtSnakeReturnNew(newSnakeBody, newPositionFood);
-      setPositionOfFoodAndSnake(newSnakeBody, newPositionFood);
+        // check colision food with snake
+        newPositionFood = checkPositionFoodAtSnakeReturnNew(newSnakeBody, newPositionFood);
+        setPositionOfFoodAndSnake(newSnakeBody, newPositionFood);
+      }
     }
   }
 
@@ -210,6 +218,7 @@ const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen, cu
   }
 
   function stopGame() {
+    // cancelAnimationFrame(requestFrameRef.current);
     clearInterval(intervalRef.current);
   }
 
@@ -227,8 +236,11 @@ const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen, cu
   useEffect(() => {
     if (!board.gameOver) {
       intervalRef.current = setInterval(moveSnake, speedOfGame);
-      onEatingFood();
-      detectCollisionSnakeAtSnake();
+      // intervalRef.current = setTimeout(() => {
+      //   requestFrameRef.current = requestAnimationFrame(moveSnake);
+      // }, speedOfGame);
+      // onEatingFood();
+      // detectCollisionSnakeAtSnake();
     }
 
     if (board.direction === 'stop') {
@@ -236,6 +248,7 @@ const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen, cu
     }
 
     if (board.gameOver) {
+      // cancelAnimationFrame(requestFrameRef.current);
       clearInterval(intervalRef.current);
       gameOver();
     }
