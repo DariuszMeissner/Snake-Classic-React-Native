@@ -1,18 +1,18 @@
 import React, { FC } from 'react';
 import { StyleSheet, TouchableHighlight, View } from 'react-native';
 import { TextCustom } from '../../components';
-import { SETTINGS_DEFAULT } from '../../constant/settingsDefault';
-import { NRoot } from '../root.interface';
+import { INIT } from '../../constant/settingsDefault';
+import { NGame } from '../../types/types';
 
 interface IMenuButtonProps {
-  title: NRoot.TSteps | NRoot.TLevels | string;
-  currentLevel?: NRoot.TLevels;
+  title: NGame.TSteps | NGame.TLevels | string;
+  currentLevel?: NGame.TLevels;
   onPress: () => void;
 }
 
 const MenuButton: FC<IMenuButtonProps> = ({ title, onPress, currentLevel }) => {
   const isActive = title === currentLevel;
-  const { colors } = SETTINGS_DEFAULT;
+  const { colors } = INIT;
 
   return (
     <TouchableHighlight onPress={onPress}>

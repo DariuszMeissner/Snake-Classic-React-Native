@@ -1,13 +1,20 @@
 import React, { FC } from 'react';
+import { StyleSheet } from 'react-native';
 import { View } from 'react-native';
-import { SETTINGS_DEFAULT } from '../constant/settingsDefault';
+import { INIT } from '../constant/settingsDefault';
 
 interface ISpaceProps {
-  value?: 20 | 50 | undefined;
+  value?: 20 | 50;
 }
 
 const Space: FC<ISpaceProps> = ({ value }) => {
-  return <View style={{ width: SETTINGS_DEFAULT.app.width, height: value || 50 }} />;
+  return <View style={[styles.space, { height: value || 50 }]} />;
 };
+
+const styles = StyleSheet.create({
+  space: {
+    width: INIT.app.section.width,
+  },
+});
 
 export default Space;

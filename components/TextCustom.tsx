@@ -1,16 +1,15 @@
 import React, { FC } from 'react';
 import { StyleSheet, Text, TextStyle } from 'react-native';
-import { SETTINGS_DEFAULT } from '../constant/settingsDefault';
-
-type TSize = 14 | 16 | 18 | 20 | undefined;
+import { INIT } from '../constant/settingsDefault';
+import { NGame } from '../types/types';
 
 interface ITextCustom {
-  size?: TSize;
+  size?: NGame.TSize;
   style?: TextStyle;
   children: React.ReactNode;
 }
 
-const DEFAULT_SIZE: TSize = 20;
+const DEFAULT_SIZE: NGame.TSize = '20';
 
 const TextCustom: FC<ITextCustom> = ({ children, style, size }) => {
   return (
@@ -18,7 +17,7 @@ const TextCustom: FC<ITextCustom> = ({ children, style, size }) => {
       style={{
         ...styles.default,
         ...style,
-        fontSize: size || DEFAULT_SIZE,
+        fontSize: Number(size) || Number(DEFAULT_SIZE),
       }}
     >
       {children}
@@ -28,8 +27,8 @@ const TextCustom: FC<ITextCustom> = ({ children, style, size }) => {
 
 const styles = StyleSheet.create({
   default: {
-    fontFamily: SETTINGS_DEFAULT.fontName,
-    color: SETTINGS_DEFAULT.colors.main,
+    fontFamily: INIT.fontName,
+    color: INIT.colors.main,
     textTransform: 'uppercase',
   },
 });

@@ -1,51 +1,51 @@
 import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 
-const INIT = {
-  blockSize: 20,
-  borderWidth: 1,
-  height: {
-    scores: 5,
-    board: 55,
-    control: 40,
-  },
-  maxWidth: 500,
-  responsiveWidthMax: responsiveWidth(100) > 500 ? 500 : responsiveWidth(100),
-  responsiveHeightMax: responsiveHeight(100),
-  screenWidthMax: responsiveWidth(100),
+const BLOCK_SIZE = 20;
+const BORDER_WIDTH = 1;
+const COMPENSATION_BLOCKSIZE = {
+  columns: 2,
+  rows: 1,
 };
+const SECTION_WIDTH =
+  Math.floor(responsiveWidth(100) / BLOCK_SIZE) * BLOCK_SIZE + BORDER_WIDTH - BLOCK_SIZE;
+const COLUMNS = Math.floor(responsiveWidth(100) / BLOCK_SIZE) - COMPENSATION_BLOCKSIZE.columns;
+const ROWS = Math.floor(responsiveHeight(55) / BLOCK_SIZE) - COMPENSATION_BLOCKSIZE.rows;
 
-export const SETTINGS_DEFAULT = {
-  screenWidthMax: INIT.screenWidthMax,
-  app: {
-    width: INIT.responsiveWidthMax,
-    height: INIT.responsiveHeightMax,
-    content: {
-      width:
-        Math.floor(INIT.responsiveWidthMax / INIT.blockSize) * INIT.blockSize +
-        2 * INIT.borderWidth -
-        INIT.blockSize,
-    },
+export const INIT = {
+  blockSize: BLOCK_SIZE,
+  borderWidth: BORDER_WIDTH,
+  snakePosition: [{ x: 0, y: 0 }],
+  foodPosition: { x: 0, y: 0 },
+  move: {
+    step: 1,
   },
   colors: {
     main: '#384331',
     second: '#8fa37e',
   },
   fontName: 'PressStart2P-Regular',
-  layout: {
-    heightSection: {
-      scores: responsiveHeight(INIT.height.scores),
-      board: responsiveHeight(INIT.height.board),
-      control: responsiveHeight(INIT.height.control),
+  app: {
+    maxWidth: responsiveWidth(100),
+    maxHeight: responsiveHeight(100),
+    section: {
+      height: {
+        scores: responsiveHeight(5),
+        board: Math.floor(responsiveHeight(55) / BLOCK_SIZE) * BLOCK_SIZE + BORDER_WIDTH,
+        control: responsiveHeight(40),
+      },
+      width: SECTION_WIDTH,
     },
     board: {
-      blockSize: INIT.blockSize,
-      borderWidth: INIT.borderWidth,
-      numberOfColumn: Math.floor(INIT.responsiveWidthMax / INIT.blockSize),
-      numberOfRows: Math.floor(responsiveHeight(INIT.height.board) / INIT.blockSize),
-      snakeStartPosition: { x: 0, y: 0 },
+      columns: COLUMNS,
+      rows: ROWS,
+    },
+    edge: {
+      top: 0,
+      right: COLUMNS,
+      left: 0,
+      bottom: ROWS,
     },
   },
-  snakeStartPosition: { x: 0, y: 0 },
 };
 
 export const CUSTOM_FONTS = {

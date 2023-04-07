@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { View, StyleSheet, ViewStyle } from 'react-native';
-import { SETTINGS_DEFAULT } from '../constant/settingsDefault';
+import { INIT } from '../constant/settingsDefault';
 
 interface ILayoutProps {
   style?: ViewStyle;
@@ -15,9 +15,8 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
     alignItems: 'center',
-    width: SETTINGS_DEFAULT.layout.width,
-    height: SETTINGS_DEFAULT.layout.height,
-    maxWidth: SETTINGS_DEFAULT.layout.maxWidth,
+    width: INIT.app.maxWidth,
+    height: INIT.app.maxHeight,
   },
 });
 

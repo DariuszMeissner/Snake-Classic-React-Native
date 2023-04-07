@@ -1,14 +1,13 @@
 import React, { FC } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { SETTINGS_DEFAULT } from '../../constant/settingsDefault';
-import { NRoot } from '../root.interface';
-import { NGame } from './game.interface';
+import { INIT } from '../../constant/settingsDefault';
+import { NGame } from '../../types/types';
 import GameButton from './GameButton';
 
 interface IGameControlProps {
   currentDirection: NGame.TDirection;
   changeDirection?: (key: NGame.TDirection) => void;
-  gameOver?: (activeStep: NRoot.TSteps) => void;
+  gameOver?: (activeStep: NGame.TSteps) => void;
 }
 
 const GameControl: FC<IGameControlProps> = ({
@@ -18,8 +17,8 @@ const GameControl: FC<IGameControlProps> = ({
 }) => {
   const isStart = currentDirection != 'stop';
   return (
-    <View style={styles.gameContainer}>
-      <View style={styles.gameNav}>
+    <View style={styles.container}>
+      <View style={styles.gameControl}>
         <View>
           <GameButton title="up" onPress={() => changeDirection('up')} />
         </View>
@@ -39,9 +38,9 @@ const GameControl: FC<IGameControlProps> = ({
         </View>
       </View>
 
-      <View style={styles.finishGameContainer}>
-        <View style={styles.finishGameButton}>
-          <GameButton title={`finish`} onPress={() => gameOver('gameOver')} invertColors />
+      <View style={styles.gameControlBottom}>
+        <View>
+          <GameButton title="finish" onPress={() => gameOver('gameOver')} invertColors />
         </View>
       </View>
     </View>
@@ -49,22 +48,19 @@ const GameControl: FC<IGameControlProps> = ({
 };
 
 const styles = StyleSheet.create({
-  gameContainer: {
-    width: SETTINGS_DEFAULT.app.content.width,
-    height: SETTINGS_DEFAULT.layout.heightSection.control,
+  container: {
+    width: INIT.app.section.width,
+    height: INIT.app.section.height.control,
   },
-  gameNav: {
+  gameControl: {
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  finishGameContainer: {
-    borderTopColor: SETTINGS_DEFAULT.colors.main,
-    borderTopWidth: SETTINGS_DEFAULT.layout.board.borderWidth,
-  },
-  finishGameButton: {
-    width: '30%',
-    height: '95%',
+  gameControlBottom: {
+    width: INIT.app.section.width,
+    borderTopColor: INIT.colors.main,
+    borderTopWidth: INIT.borderWidth,
   },
   row: {
     flexDirection: 'row',
