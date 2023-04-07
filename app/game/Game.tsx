@@ -236,10 +236,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  gridBreak: {
-    flexBasis: '100%',
-    height: 0,
-  },
 });
 
 export default Game;
