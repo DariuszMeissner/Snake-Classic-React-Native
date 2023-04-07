@@ -1,12 +1,12 @@
 import React, { FC } from 'react';
 import { Layout, Space } from '../../components';
-import { NRoot } from '../root.interface';
+import { NGame } from '../../types/types';
 import MenuButton from './MenuButton';
 
 interface IMenuLevelsProps {
-  currentLevel: NRoot.TLevels;
-  onPressSetLevel: (level: NRoot.TLevels) => void;
-  onPressGoToStep: (level: NRoot.TSteps) => void;
+  currentLevel: NGame.TLevels;
+  onPressSetLevel: (level: NGame.TLevels) => void;
+  onPressGoToStep: (level: NGame.TSteps) => void;
 }
 
 const MenuLevels: FC<IMenuLevelsProps> = ({ onPressSetLevel, onPressGoToStep, currentLevel }) => {

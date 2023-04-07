@@ -1,13 +1,14 @@
-export namespace NRoot {
+export namespace NGame {
   export type TLevels = 'veryHeight' | 'height' | 'medium' | 'easy';
   export type TSteps = 'menu' | 'new game' | 'levels' | 'highest score' | 'gameOver';
-  export type TSpeed = 30 | 60 | 120 | 240;
+  export type TDirection = 'left' | 'right' | 'up' | 'down' | 'stop' | 'start';
+  export type TSize = '14' | '16' | '18' | '20';
 
   export enum SpeedLevel {
     veryHeight = 1,
-    height = 40,
-    medium = 80,
-    easy = 150,
+    height = 35,
+    medium = 55,
+    easy = 100,
   }
 
   export enum PointRate {
@@ -36,5 +37,20 @@ export namespace NRoot {
       heighestScore: boolean;
       gameOver: boolean;
     };
+  }
+
+  export interface IBoard {
+    snakeBody: ICordinates[];
+    food: ICordinates | null;
+    direction: TDirection;
+    lastDirection: TDirection;
+    gameOver: boolean;
+    points: number;
+    gameIsStopped: boolean;
+  }
+
+  export interface ICordinates {
+    x: number;
+    y: number;
   }
 }

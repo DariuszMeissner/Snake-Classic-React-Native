@@ -1,12 +1,12 @@
 import React, { FC, useEffect, useState } from 'react';
 import Game from './game/Game';
 import Menu from './menu/Menu';
-import { NRoot } from './root.interface';
 import { MenuBestScore, MenuLevels } from './menu';
 import { APP_INIT } from './root.data';
 import { GameOver } from './game';
 import { useAsyncStorage } from '@react-native-async-storage/async-storage';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
+import { NGame } from '../types/types';
 
 interface IRootProps {
   storageBestScore: string;
@@ -14,7 +14,7 @@ interface IRootProps {
 
 const Root: FC<IRootProps> = ({ storageBestScore }) => {
   const { setItem } = useAsyncStorage('@storage_key');
-  const [appState, setAppState] = useState<NRoot.IApp>(APP_INIT);
+  const [appState, setAppState] = useState<NGame.IApp>(APP_INIT);
 
   useEffect(() => {
     setAppState((prev) => ({ ...prev, heighestScore: Number(storageBestScore) }));
@@ -24,7 +24,7 @@ const Root: FC<IRootProps> = ({ storageBestScore }) => {
     await setItem(score);
   };
 
-  function goToStep(activeStep: NRoot.TSteps): void {
+  function goToStep(activeStep: NGame.TSteps): void {
     setAppState((prev) => ({
       ...prev,
       step: {
@@ -38,12 +38,12 @@ const Root: FC<IRootProps> = ({ storageBestScore }) => {
     }));
   }
 
-  function setCurrentLevel(currentLevel: NRoot.TLevels): void {
-    const levelAsIndex: keyof typeof NRoot.SpeedLevel = currentLevel;
+  function setCurrentLevel(currentLevel: NGame.TLevels): void {
+    const levelAsIndex: keyof typeof NGame.SpeedLevel = currentLevel;
 
     setAppState((prev) => ({
       ...prev,
-      speed: NRoot.SpeedLevel[levelAsIndex],
+      speed: NGame.SpeedLevel[levelAsIndex],
       currentLevel: {
         name: currentLevel,
         veryHeight: currentLevel === 'veryHeight',
@@ -71,7 +71,7 @@ const Root: FC<IRootProps> = ({ storageBestScore }) => {
     writeItemToStorage(newScore.toString());
   }
 
-  function goToMenuAndSetLevel(currentLevel: NRoot.TLevels): void {
+  function goToMenuAndSetLevel(currentLevel: NGame.TLevels): void {
     goToStep('menu');
     setCurrentLevel(currentLevel);
   }

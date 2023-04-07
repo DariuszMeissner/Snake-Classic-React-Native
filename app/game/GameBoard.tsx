@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { StyleSheet } from 'react-native';
 import { View } from 'react-native';
-import { SETTINGS_DEFAULT } from '../../constant/settingsDefault';
+import { INIT } from '../../constant/settingsDefault';
 
 interface IGameBoardProps {
   children: React.ReactNode;
@@ -13,14 +13,12 @@ const GameBoard: FC<IGameBoardProps> = ({ children }) => {
 
 const styles = StyleSheet.create({
   gameBoard: {
-    width: SETTINGS_DEFAULT.app.content.width,
+    width: INIT.app.section.width,
+    height: INIT.app.section.height.board,
     borderStyle: 'solid',
-    borderColor: SETTINGS_DEFAULT.colors.main,
-    borderWidth: SETTINGS_DEFAULT.layout.board.borderWidth,
-    backgroundColor: SETTINGS_DEFAULT.colors.second,
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    borderColor: INIT.colors.main,
+    borderWidth: INIT.borderWidth,
+    backgroundColor: INIT.colors.second,
   },
 });
 

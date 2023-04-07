@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, ViewStyle } from 'react-native';
 import { Layout, TextCustom } from '../../components';
-import { SETTINGS_DEFAULT } from '../../constant/settingsDefault';
+import { INIT } from '../../constant/settingsDefault';
 
 const GameWarning = () => {
   const [showWarning, setShowWarning] = useState<boolean>(true);
@@ -21,7 +21,7 @@ const GameWarning = () => {
 
   return (
     <Layout style={{ ...styles.gameWarning, ...animationStyles }}>
-      <TextCustom size={18}>game is stopped</TextCustom>
+      <TextCustom size={'16'}>game is stopped</TextCustom>
     </Layout>
   );
 };
@@ -29,9 +29,8 @@ const GameWarning = () => {
 const styles = StyleSheet.create({
   gameWarning: {
     position: 'absolute',
-    top:
-      (SETTINGS_DEFAULT.layout.heightSection.board + SETTINGS_DEFAULT.layout.heightSection.scores) /
-      2,
+    top: (INIT.app.section.height.board + INIT.app.section.height.scores) / 2,
+    height: 100,
   },
 });
 export default GameWarning;

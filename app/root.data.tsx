@@ -1,6 +1,6 @@
-import { NRoot } from './root.interface';
+import { NGame } from '../types/types';
 
-export const APP_INIT: NRoot.IApp = {
+export const APP_INIT: NGame.IApp = {
   step: {
     name: 'menu',
     menu: true,
@@ -11,7 +11,7 @@ export const APP_INIT: NRoot.IApp = {
   },
   heighestScore: 0,
   currentScore: 0,
-  speed: NRoot.SpeedLevel.medium,
+  speed: NGame.SpeedLevel.easy,
   currentLevel: {
     name: 'medium',
     veryHeight: false,

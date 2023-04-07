@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { TextCustom } from '../../components';
-import { SETTINGS_DEFAULT } from '../../constant/settingsDefault';
+import { INIT } from '../../constant/settingsDefault';
 
 interface IGameScoresProps {
   result: number;
@@ -17,8 +17,8 @@ const GameScores: FC<IGameScoresProps> = ({ result }) => {
 
 const styles = StyleSheet.create({
   gameScores: {
-    height: SETTINGS_DEFAULT.layout.heightSection.scores,
-    width: SETTINGS_DEFAULT.app.content.width,
+    height: INIT.app.section.height.scores,
+    width: INIT.app.section.width,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'flex-start',

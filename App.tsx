@@ -5,7 +5,7 @@ import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import Root from './app/Root';
-import { CUSTOM_FONTS, SETTINGS_DEFAULT } from './constant/settingsDefault';
+import { CUSTOM_FONTS, INIT } from './constant/settingsDefault';
 import { StatusBar } from 'expo-status-bar';
 
 const TIME_OF_SPLASH_SCREEN = 1000;
@@ -19,19 +19,20 @@ export default function App() {
   const [storageScore, setStorageScore] = useState<string>('');
   const { getItem } = useAsyncStorage('@storage_key');
 
-  const extendShowingScreen = async () => {
+  useEffect(() => {
+    prepareApp();
+  }, []);
+
+  async function extendShowingScreen() {
     await new Promise((resolve) => setTimeout(resolve, TIME_OF_SPLASH_SCREEN));
-  };
+  }
 
-  const readItemFromStorage = async () => {
+  async function readItemFromStorage() {
     const item = await getItem();
+    if (item) setStorageScore(item);
+  }
 
-    if (item) {
-      setStorageScore(item);
-    }
-  };
-
-  const prepare = async () => {
+  async function prepareApp() {
     try {
       // Pre-load fonts, make any API calls you need to do here
       await Font.loadAsync(CUSTOM_FONTS);
@@ -43,11 +44,7 @@ export default function App() {
       // Tell the application to render
       setAppIsReady(true);
     }
-  };
-
-  useEffect(() => {
-    prepare();
-  }, []);
+  }
 
   const onLayoutRootView = useCallback(async () => {
     if (appIsReady) {
@@ -57,9 +54,14 @@ export default function App() {
 
   // at browser
   if (!appIsReady) {
+    return null;
+  }
+
+  if (error) {
     return (
       <View>
-        <Text>My Splash Screen</Text>
+        <Text>Something went wrong!</Text>
+        <Text>Please reloade application later.</Text>
       </View>
     );
   }
@@ -82,9 +84,9 @@ export default function App() {
 
 const styles = StyleSheet.create({
   app: {
-    width: SETTINGS_DEFAULT.screenWidthMax,
-    height: SETTINGS_DEFAULT.app.height,
-    backgroundColor: SETTINGS_DEFAULT.colors.second,
+    width: INIT.app.maxWidth,
+    height: INIT.app.maxHeight,
+    backgroundColor: INIT.colors.second,
     display: 'flex',
     justifyContent: 'center',
     overflow: 'hidden',
