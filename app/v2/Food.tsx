@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, memo } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { INIT } from '../../constant/settingsDefault';
 import { NGame } from '../../types/types';
@@ -29,4 +29,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Food;
+export default memo(Food);

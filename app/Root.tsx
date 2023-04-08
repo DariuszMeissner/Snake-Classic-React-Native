@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import Game from './game/Game';
 import Menu from './menu/Menu';
 import { MenuBestScore, MenuLevels } from './menu';
@@ -24,20 +24,6 @@ const Root: FC<IRootProps> = ({ storageBestScore }) => {
     await setItem(score);
   };
 
-  function goToStep(activeStep: NGame.TSteps): void {
-    setAppState((prev) => ({
-      ...prev,
-      step: {
-        name: activeStep,
-        menu: activeStep === 'menu',
-        newGame: activeStep === 'new game',
-        level: activeStep === 'levels',
-        heighestScore: activeStep === 'highest score',
-        gameOver: activeStep === 'gameOver',
-      },
-    }));
-  }
-
   function setCurrentLevel(currentLevel: NGame.TLevels): void {
     const levelAsIndex: keyof typeof NGame.SpeedLevel = currentLevel;
 
@@ -58,18 +44,38 @@ const Root: FC<IRootProps> = ({ storageBestScore }) => {
     return score > appState.heighestScore ? score : appState.heighestScore;
   }
 
-  function setHeighestScore(score: number): void {
-    const newScore = checkHeighestScore(score);
-    const currentScore = score;
+  const goToStep = useCallback(
+    (activeStep: NGame.TSteps): void => {
+      setAppState((prev) => ({
+        ...prev,
+        step: {
+          name: activeStep,
+          menu: activeStep === 'menu',
+          newGame: activeStep === 'new game',
+          level: activeStep === 'levels',
+          heighestScore: activeStep === 'highest score',
+          gameOver: activeStep === 'gameOver',
+        },
+      }));
+    },
+    [appState.step]
+  );
 
-    setAppState((prev) => ({
-      ...prev,
-      heighestScore: newScore,
-      currentScore,
-    }));
+  const setHeighestScore = useCallback(
+    (score: number): void => {
+      const newScore = checkHeighestScore(score);
+      const currentScore = score;
 
-    writeItemToStorage(newScore.toString());
-  }
+      setAppState((prev) => ({
+        ...prev,
+        heighestScore: newScore,
+        currentScore,
+      }));
+
+      writeItemToStorage(newScore.toString());
+    },
+    [appState.currentScore]
+  );
 
   function goToMenuAndSetLevel(currentLevel: NGame.TLevels): void {
     goToStep('menu');

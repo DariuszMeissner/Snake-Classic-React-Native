@@ -1,4 +1,13 @@
-import React, { FC, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, {
+  FC,
+  memo,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { StyleSheet, View } from 'react-native';
 import { GameBoard, GameControl, GameScores, GameWarning } from '.';
 import { INIT } from '../../constant/settingsDefault';
@@ -6,16 +15,21 @@ import { NGame } from '../../types/types';
 import Food from '../v2/Food';
 import Snake from '../v2/Snake';
 
-interface IGame {
+interface IGameProps {
   speedOfGame: number;
+  currentLevel: NGame.TLevels;
   setHeighestScore: (score: number) => void;
   showGameOverScreen: (activeStep: NGame.TSteps) => void;
-  currentLevel: NGame.TLevels;
 }
 
-const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen, currentLevel }) => {
-  const intervalId = useRef<any>(null);
-  const requestFrameId = useRef<any>(null);
+const Game: FC<IGameProps> = ({
+  speedOfGame,
+  setHeighestScore,
+  showGameOverScreen,
+  currentLevel,
+}) => {
+  const intervalId = useRef<NodeJS.Timeout | undefined>(undefined);
+  const requestFrameId = useRef<number>(0);
 
   const [board, setBoard] = useState<NGame.IBoard>({
     snakeBody: INIT.snakePosition,
@@ -27,11 +41,41 @@ const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen, cu
     gameIsStopped: false,
   });
 
+  // generate food position before render components
   useLayoutEffect(() => {
     setBoard((prev) => ({ ...prev, food: generatePosition() }));
   }, []);
 
-  function updateFrame() {
+  useEffect(() => {
+    if (board.direction === 'stop') {
+      setBoard((prev) => ({ ...prev, gameIsStopped: true }));
+    }
+  }, [board.direction]);
+
+  useEffect(() => {
+    if (!board.gameOver) {
+      intervalId.current = setTimeout(() => {
+        requestFrameId.current = requestAnimationFrame(updateFrame);
+        checkCollision();
+      }, speedOfGame);
+    }
+
+    if (board.direction === 'stop') {
+      clearingIntervalsGame();
+    }
+
+    if (board.gameOver) {
+      gameOver();
+    }
+
+    return () => {
+      clearingIntervalsGame();
+    };
+  }, [board.direction, board.snakeBody, board.food, board.gameOver]);
+
+  useEffect(() => {}, [board.snakeBody]);
+
+  function updateFrame(): void {
     const snakeHead = board.snakeBody[0];
     const newSnakeBody = board.snakeBody;
     const newHead = { ...snakeHead };
@@ -62,7 +106,7 @@ const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen, cu
     snakeHead: NGame.ICordinates,
     newSnakeBody: NGame.ICordinates[],
     newHead: NGame.ICordinates
-  ) {
+  ): void {
     if (snakeHead.x === board.food?.x && snakeHead.y === board.food.y) {
       newSnakeBody.push({ x: board.food.x, y: board.food.y });
 
@@ -84,7 +128,7 @@ const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen, cu
     }
   }
 
-  function reversePositionOnEdge(newHead: NGame.ICordinates) {
+  function reversePositionOnEdge(newHead: NGame.ICordinates): void {
     const { top, left, right, bottom } = INIT.app.edge;
 
     if (newHead.x < left) newHead.x = right;
@@ -97,26 +141,6 @@ const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen, cu
     if (direction != 'stop') {
       setBoard((prev) => ({ ...prev, lastDirection: direction }));
     }
-  }
-
-  function changeDirection(key: NGame.TDirection): void {
-    let currentDirection: NGame.TDirection = board.direction;
-
-    if (board.direction != 'stop') {
-      if (key === 'left') currentDirection = board.direction === 'right' ? 'right' : 'left';
-      if (key === 'right') currentDirection = board.direction === 'left' ? 'left' : 'right';
-      if (key === 'up') currentDirection = board.direction === 'down' ? 'down' : 'up';
-      if (key === 'down') currentDirection = board.direction === 'up' ? 'up' : 'down';
-      if (key === 'stop') currentDirection = 'stop';
-    }
-
-    if (key === 'start') {
-      currentDirection = board.lastDirection;
-      resumeGame();
-    }
-
-    setBoard((prev) => ({ ...prev, direction: currentDirection }));
-    saveLastDirection(currentDirection);
   }
 
   function generatePosition(): NGame.ICordinates {
@@ -174,54 +198,62 @@ const Game: FC<IGame> = ({ speedOfGame, setHeighestScore, showGameOverScreen, cu
     setBoard((prev) => ({ ...prev, gameIsStopped: false }));
   }
 
-  function clearingIntervalsGame() {
+  function clearingIntervalsGame(): void {
     clearInterval(intervalId.current);
     cancelAnimationFrame(requestFrameId.current);
   }
 
-  function gameOver(): void {
+  const changeDirection = useCallback(
+    (key: NGame.TDirection): void => {
+      let currentDirection: NGame.TDirection = board.direction;
+
+      if (board.direction != 'stop') {
+        if (key === 'left') currentDirection = board.direction === 'right' ? 'right' : 'left';
+        if (key === 'right') currentDirection = board.direction === 'left' ? 'left' : 'right';
+        if (key === 'up') currentDirection = board.direction === 'down' ? 'down' : 'up';
+        if (key === 'down') currentDirection = board.direction === 'up' ? 'up' : 'down';
+        if (key === 'stop') currentDirection = 'stop';
+      }
+
+      if (key === 'start') {
+        currentDirection = board.lastDirection;
+        resumeGame();
+      }
+
+      setBoard((prev) => ({ ...prev, direction: currentDirection }));
+      saveLastDirection(currentDirection);
+    },
+    [board.direction]
+  );
+
+  const gameOver = useCallback(() => {
     setHeighestScore(board.points);
     showGameOverScreen('gameOver');
     clearingIntervalsGame();
-  }
+  }, [board.points]);
 
-  useEffect(() => {
-    if (board.direction === 'stop') {
-      setBoard((prev) => ({ ...prev, gameIsStopped: true }));
-    }
+  const isStopDirectionProps = useMemo((): boolean => {
+    return board.direction === 'stop';
   }, [board.direction]);
 
-  useEffect(() => {
-    if (!board.gameOver) {
-      intervalId.current = setTimeout(() => {
-        requestFrameId.current = requestAnimationFrame(updateFrame);
-        checkCollision();
-      }, speedOfGame);
-    }
+  const foodProps = useMemo((): NGame.ICordinates | null => {
+    return board.food;
+  }, [board.food]);
 
-    if (board.direction === 'stop') {
-      clearingIntervalsGame();
-    }
-
-    if (board.gameOver) {
-      gameOver();
-    }
-
-    return () => {
-      clearingIntervalsGame();
-    };
-  }, [board]);
+  const snakeBodyProps = useMemo((): NGame.ICordinates[] => {
+    return board.snakeBody;
+  }, [board.snakeBody]);
 
   return (
     <View style={styles.gameContainer}>
       <GameScores result={board.points} />
       <GameBoard>
-        <Snake snakeBody={board.snakeBody} />
-        <Food food={board.food || { x: 0, y: 0 }} />
+        <Snake snakeBody={snakeBodyProps} />
+        <Food food={foodProps || { x: 0, y: 0 }} />
       </GameBoard>
       <GameControl
         changeDirection={changeDirection}
-        currentDirection={board.direction}
+        isStopDirection={isStopDirectionProps}
         gameOver={gameOver}
       />
 
@@ -238,4 +270,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Game;
+export default memo(Game);

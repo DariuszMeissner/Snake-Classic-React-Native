@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, memo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { TextCustom } from '../../components';
 import { INIT } from '../../constant/settingsDefault';
@@ -10,7 +10,7 @@ interface IGameScoresProps {
 const GameScores: FC<IGameScoresProps> = ({ result }) => {
   return (
     <View style={styles.gameScores}>
-      <TextCustom size={14}>{result || 0}</TextCustom>
+      <TextCustom size={'14'}>{result || 0}</TextCustom>
     </View>
   );
 };
@@ -25,4 +25,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GameScores;
+export default memo(GameScores);

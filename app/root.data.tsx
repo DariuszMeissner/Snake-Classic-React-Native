@@ -13,10 +13,10 @@ export const APP_INIT: NGame.IApp = {
   currentScore: 0,
   speed: NGame.SpeedLevel.easy,
   currentLevel: {
-    name: 'medium',
+    name: 'easy',
     veryHeight: false,
     height: false,
-    medium: true,
-    easy: false,
+    medium: false,
+    easy: true,
   },
 };

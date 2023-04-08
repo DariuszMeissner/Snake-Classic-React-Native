@@ -1,21 +1,20 @@
-import React, { FC } from 'react';
+import React, { FC, memo } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { INIT } from '../../constant/settingsDefault';
 import { NGame } from '../../types/types';
 import GameButton from './GameButton';
 
 interface IGameControlProps {
-  currentDirection: NGame.TDirection;
+  isStopDirection: boolean;
   changeDirection?: (key: NGame.TDirection) => void;
   gameOver?: (activeStep: NGame.TSteps) => void;
 }
 
 const GameControl: FC<IGameControlProps> = ({
-  currentDirection,
+  isStopDirection,
   changeDirection = () => {},
   gameOver = () => {},
 }) => {
-  const isStart = currentDirection != 'stop';
   return (
     <View style={styles.container}>
       <View style={styles.gameControl}>
@@ -27,8 +26,8 @@ const GameControl: FC<IGameControlProps> = ({
           <GameButton title="left" onPress={() => changeDirection('left')} />
 
           <GameButton
-            title={isStart ? 'stop' : 'start'}
-            onPress={() => changeDirection(isStart ? 'stop' : 'start')}
+            title={isStopDirection ? 'start' : 'stop'}
+            onPress={() => changeDirection(isStopDirection ? 'start' : 'stop')}
           />
           <GameButton title="right" onPress={() => changeDirection('right')} />
         </View>
@@ -39,7 +38,7 @@ const GameControl: FC<IGameControlProps> = ({
       </View>
 
       <View style={styles.gameControlBottom}>
-        <View>
+        <View style={styles.finishButton}>
           <GameButton title="finish" onPress={() => gameOver('gameOver')} invertColors />
         </View>
       </View>
@@ -62,10 +61,13 @@ const styles = StyleSheet.create({
     borderTopColor: INIT.colors.main,
     borderTopWidth: INIT.borderWidth,
   },
+  finishButton: {
+    width: '33%',
+  },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
 });
 
-export default GameControl;
+export default memo(GameControl);
