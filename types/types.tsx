@@ -5,9 +5,9 @@ export namespace NGame {
   export type TSize = '14' | '16' | '18' | '20';
 
   export enum SpeedLevel {
-    veryHeight = 1,
-    height = 35,
-    medium = 55,
+    veryHeight = 15,
+    height = 30,
+    medium = 60,
     easy = 100,
   }
 
