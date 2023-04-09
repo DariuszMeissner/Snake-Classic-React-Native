@@ -6,9 +6,11 @@ const COMPENSATION_BLOCKSIZE = {
   columns: 2,
   rows: 1,
 };
-const SECTION_WIDTH =
-  Math.floor(responsiveWidth(100) / BLOCK_SIZE) * BLOCK_SIZE + BORDER_WIDTH - BLOCK_SIZE;
-const COLUMNS = Math.floor(responsiveWidth(100) / BLOCK_SIZE) - COMPENSATION_BLOCKSIZE.columns;
+
+const MAX_WIDTH = responsiveWidth(100) <= 520 ? responsiveHeight(100) : 520;
+const SECTION_WIDTH = Math.floor(MAX_WIDTH / BLOCK_SIZE) * BLOCK_SIZE + BORDER_WIDTH - BLOCK_SIZE;
+
+const COLUMNS = Math.floor(MAX_WIDTH / BLOCK_SIZE) - COMPENSATION_BLOCKSIZE.columns;
 const ROWS = Math.floor(responsiveHeight(55) / BLOCK_SIZE) - COMPENSATION_BLOCKSIZE.rows;
 
 export const INIT = {
@@ -25,7 +27,7 @@ export const INIT = {
   },
   fontName: 'PressStart2P-Regular',
   app: {
-    maxWidth: responsiveWidth(100),
+    maxWidth: MAX_WIDTH,
     maxHeight: responsiveHeight(100),
     section: {
       height: {
