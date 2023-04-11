@@ -2,10 +2,10 @@ import React, { FC } from 'react';
 import { View } from 'react-native';
 import { MenuButton } from '.';
 import { Layout } from '../../components';
-import { NRoot } from '../root.interface';
+import { NGame } from '../../types/types';
 
 interface IMenuProps {
-  onPress: (step: NRoot.TSteps) => void;
+  onPress: (step: NGame.TSteps) => void;
 }
 
 const Menu: FC<IMenuProps> = ({ onPress }) => {
