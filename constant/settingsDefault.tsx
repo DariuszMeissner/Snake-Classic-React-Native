@@ -7,7 +7,7 @@ const COMPENSATION_BLOCKSIZE = {
   rows: 1,
 };
 
-const MAX_WIDTH = responsiveWidth(100) <= 520 ? responsiveHeight(100) : 520;
+const MAX_WIDTH = responsiveWidth(100) <= 520 ? responsiveWidth(100) : 520;
 const SECTION_WIDTH = Math.floor(MAX_WIDTH / BLOCK_SIZE) * BLOCK_SIZE + BORDER_WIDTH - BLOCK_SIZE;
 
 const COLUMNS = Math.floor(MAX_WIDTH / BLOCK_SIZE) - COMPENSATION_BLOCKSIZE.columns;
