@@ -7,6 +7,8 @@ import * as SplashScreen from 'expo-splash-screen';
 import Root from './app/Root';
 import { CUSTOM_FONTS, INIT } from './constant/settingsDefault';
 import { StatusBar } from 'expo-status-bar';
+import { responsiveScreenWidth } from 'react-native-responsive-dimensions';
+import { getDeviceTypeAsync } from 'expo-device';
 
 const TIME_OF_SPLASH_SCREEN = 1000;
 
@@ -70,7 +72,7 @@ export default function App() {
     <React.StrictMode>
       <SafeAreaProvider style={styles.app}>
         <SafeAreaView>
-          <View nativeID="app">
+          <View>
             <View onLayout={onLayoutRootView}>
               <Root storageBestScore={storageScore} />
               <StatusBar style={'dark'} />
@@ -84,11 +86,14 @@ export default function App() {
 
 const styles = StyleSheet.create({
   app: {
-    width: INIT.app.maxWidth,
+    width: responsiveScreenWidth(100),
     height: INIT.app.maxHeight,
     backgroundColor: INIT.colors.second,
     display: 'flex',
     justifyContent: 'center',
     overflow: 'hidden',
+  },
+  root: {
+    width: INIT.app.maxWidth,
   },
 });
