@@ -33,7 +33,7 @@ const GameButton: FC<IButtonNavProps> = ({ title, onPress, invertColors = false 
 
 const styles = StyleSheet.create({
   button: {
-    height: INIT.app.section.height.control / NUMBER_OF_ROW,
+    height: Math.floor(INIT.app.section.height.control / NUMBER_OF_ROW),
     width: Math.floor(INIT.app.section.width / NUMBER_OF_COL),
     justifyContent: 'center',
     alignItems: 'center',

@@ -1,4 +1,5 @@
 import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
+import { isTablet } from '../utils/DeviceType';
 
 const BLOCK_SIZE = 20;
 const BORDER_WIDTH = 1;
@@ -6,12 +7,14 @@ const COMPENSATION_BLOCKSIZE = {
   columns: 2,
   rows: 1,
 };
+const BOARD_HEIGHT = isTablet ? 40 : 55;
+const CONTROL_HEIGHT = isTablet ? 36 : 40;
 
 const MAX_WIDTH = responsiveWidth(100) <= 520 ? responsiveWidth(100) : 520;
 const SECTION_WIDTH = Math.floor(MAX_WIDTH / BLOCK_SIZE) * BLOCK_SIZE + BORDER_WIDTH - BLOCK_SIZE;
 
 const COLUMNS = Math.floor(MAX_WIDTH / BLOCK_SIZE) - COMPENSATION_BLOCKSIZE.columns;
-const ROWS = Math.floor(responsiveHeight(55) / BLOCK_SIZE) - COMPENSATION_BLOCKSIZE.rows;
+const ROWS = Math.floor(responsiveHeight(BOARD_HEIGHT) / BLOCK_SIZE) - COMPENSATION_BLOCKSIZE.rows;
 
 export const INIT = {
   blockSize: BLOCK_SIZE,
@@ -31,9 +34,9 @@ export const INIT = {
     maxHeight: responsiveHeight(100),
     section: {
       height: {
-        scores: responsiveHeight(5),
-        board: Math.floor(responsiveHeight(55) / BLOCK_SIZE) * BLOCK_SIZE + BORDER_WIDTH,
-        control: responsiveHeight(40),
+        scores: Math.floor(responsiveHeight(5)),
+        board: Math.floor(responsiveHeight(BOARD_HEIGHT) / BLOCK_SIZE) * BLOCK_SIZE + BORDER_WIDTH,
+        control: responsiveHeight(CONTROL_HEIGHT),
       },
       width: SECTION_WIDTH,
     },
