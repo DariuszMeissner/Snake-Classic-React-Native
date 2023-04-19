@@ -15,3 +15,6 @@
 
 ## Scrennshots
 ![features-snake-classic](https://user-images.githubusercontent.com/59477908/232758302-c1f8d1b7-6305-49ad-a5d8-37bac2baac89.png)
+
+## Technologies
+React Native, Expo, Typescript, React-Native-Async-Storage, React-Native-Safe-Area-Context
